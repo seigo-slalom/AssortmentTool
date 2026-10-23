@@ -1,0 +1,36 @@
+version: 2
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 10
+    groups:
+      # Packages with shared peer ranges must move together.
+      vite-ecosystem:
+        patterns: ['vite', '@vitejs/*', 'vitest', '@vitest/*', '@microsoft/power-apps-vite']
+      typescript:
+        patterns: ['typescript', 'typescript-eslint', '@typescript-eslint/*']
+      eslint:
+        patterns: ['eslint', '@eslint/*', 'eslint-plugin-*', 'globals']
+      ant-design:
+        patterns: ['antd', '@ant-design/*']
+      minor-and-patch:
+        patterns: ['*']
+        update-types: ['minor', 'patch']
+    ignore:
+      # typescript-eslint caps its TypeScript peer range; lift this once it supports the next major.
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
+    commit-message:
+      prefix: 'chore(deps)'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    groups:
+      github-actions:
+        patterns: ['*']
+    commit-message:
+      prefix: 'chore(ci)'

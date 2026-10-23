@@ -1,0 +1,7 @@
+dist
+node_modules
+src/generated
+power.config.json
+package-lock.json
+.specify
+.github/skills

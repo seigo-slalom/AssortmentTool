@@ -1,0 +1,21 @@
+# NOTICE
+
+This project is a Slalom starter template for building Power Platform code apps with
+Spec-Driven Development. It is derived from and integrates the following open-source work:
+
+- **Microsoft PowerAppsCodeApps** (MIT License) —
+  https://github.com/microsoft/PowerAppsCodeApps
+  The React + Vite + TypeScript code-app foundation and `@microsoft/power-apps` /
+  `@microsoft/power-apps-vite` usage patterns are based on Microsoft's templates.
+
+- **GitHub Spec Kit** (MIT License) — https://github.com/github/spec-kit
+  The Spec-Driven Development workflow, `/speckit.*` commands, and templates under
+  `.specify/` are provided by Spec Kit.
+
+- **Microsoft Power Platform Code Apps skills/plugin** (MIT License) —
+  https://github.com/microsoft/power-platform-skills
+  Power Platform code-app guidance (connector-first patterns, generated services, CLI
+  usage) is informed by the Code Apps plugin and `code-app-architect` agent.
+
+Portions Copyright (c) Microsoft Corporation. Portions Copyright (c) GitHub, Inc.
+All trademarks are the property of their respective owners.
