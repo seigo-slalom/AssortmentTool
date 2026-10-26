@@ -131,7 +131,7 @@ npx power-apps push         # deploy to Power Apps; returns a shareable app URL
 | `npm run dev`                                              | Start the Vite dev server (prints the Local Play URL)         |
 | `npm run build`                                            | Type-check + production build (`tsc -b && vite build`)        |
 | `npm run lint` / `npm run format`                          | Lint / format                                                 |
-| `npm test` / `npm run test:e2e`                            | Unit tests (Vitest) / e2e (Playwright)                        |
+| `npm test` / `npm run test:coverage` / `npm run test:e2e`  | Unit tests / unit tests with the 100% coverage gate / e2e     |
 | `npx power-apps add data-source --connector <api> -c <id>` | Generate typed services for a data source                     |
 | `npx power-apps push`                                      | Build output → deploy to Power Apps                           |
 | `npx power-apps connection list`                           | Find connection IDs                                           |

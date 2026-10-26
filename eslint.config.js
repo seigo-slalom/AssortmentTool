@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint';
 import { defineConfig, globalIgnores } from 'eslint/config';
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'coverage']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
@@ -69,6 +69,27 @@ export default defineConfig([
               group: ['@azure/*'],
               message:
                 'Direct Azure SDK calls are not allowed in code apps. Use a generated connector service instead.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // Principle XIII: the engine core is pure (no React, I/O, generated services, or adapters).
+    files: ['src/features/engine/core/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['react', 'react-dom', 'react-dom/*', 'antd', '@microsoft/power-apps*'],
+              message: 'The engine core must stay pure: no UI or platform imports.',
+            },
+            {
+              group: ['**/generated/**', '**/adapters/**'],
+              message: 'The engine core must not import generated services or adapters.',
             },
           ],
         },

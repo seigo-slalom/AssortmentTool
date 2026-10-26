@@ -1,15 +1,11 @@
-import { lazy, Suspense } from 'react';
-import { Flex, Layout, Space, Spin, Typography } from 'antd';
+import { Layout, Space, Typography } from 'antd';
 import { Route, Routes } from 'react-router-dom';
+import PlaceholderBanner from './components/PlaceholderBanner';
 import { usePowerContext } from './lib/powerContext';
 
 const { Header, Content, Footer } = Layout;
 
-// Route-level code-splitting: as new pages are added under src/pages, import them
-// with lazy() (not a static import) so each route ships its own chunk instead of
-// growing the main bundle. See frontend-standards.md for the rationale.
-const HomePage = lazy(() => import('./pages/HomePage'));
-
+// Feature screens are added as routes here (lazy-load each page from src/pages).
 export default function App() {
   const context = usePowerContext();
   const userName = context?.user.fullName;
@@ -25,17 +21,9 @@ export default function App() {
         )}
       </Header>
       <Content style={{ padding: 24 }}>
-        <Suspense
-          fallback={
-            <Flex justify="center" style={{ padding: 48 }}>
-              <Spin size="large" />
-            </Flex>
-          }
-        >
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-          </Routes>
-        </Suspense>
+        <Routes>
+          <Route path="*" element={<PlaceholderBanner />} />
+        </Routes>
       </Content>
       <Footer style={{ textAlign: 'center' }}>
         <Space>Slalom · Spec-Driven Development Starter</Space>

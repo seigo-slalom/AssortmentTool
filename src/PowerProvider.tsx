@@ -17,7 +17,6 @@ export default function PowerProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let cancelled = false;
     const timeout = setTimeout(() => {
-      if (cancelled) return;
       setState({
         status: 'error',
         message:
