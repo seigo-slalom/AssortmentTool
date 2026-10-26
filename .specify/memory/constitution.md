@@ -1,5 +1,17 @@
 <!--
 Sync Impact Report
+- Version change: 2.1.0 → 2.2.0 (MINOR)
+  Rationale: formalizes a manual amendment to Principle XIII adding a new non-negotiable
+  storage/memory constraint (derived-never-persisted, factored base assortments per
+  (Tier, Product Line), sparse exceptions, lazy evaluation). New binding guidance, not a
+  wording fix, hence MINOR rather than PATCH.
+- Modified principles: XIII. The Assortment Engine Is Pure, Isolated, and Test-First
+  (storage & memory rule added; manual text normalized to MUST language, stray quote
+  removed, rationale added)
+- Added / removed sections: none
+- Deferred TODOs (unchanged): TODO(OWNING_TEAM), TODO(REVIEWERS), TODO(RETAILER_FIELD)
+
+Previous report (2.1.0):
 - Version change: 2.0.0 → 2.1.0 (MINOR)
   Rationale: resolves deferred TODOs from 2.0.0 with stakeholder answers and materially
   expands guidance (screen scope, engine matching/precedence rules, visual-regression
@@ -235,6 +247,15 @@ lines such as differing case or whitespace, conflicting exceptions, inactive rec
 have unit tests written before or alongside the code, and the UI MUST surface *why* a SKU
 is or is not assorted to a door.
 
+**Door assortments are derived, never persisted.** No Dataverse table, browser storage, or
+in-memory structure may hold a materialized Door × SKU result. The engine MUST compute and
+cache base assortments once per (Tier, Product Line) pair and treat Door-level and
+Retailer-level exceptions as sparse adjustments resolved at lookup time; results are
+produced lazily for the doors and rows a screen actually needs. Rationale: assortments can
+reach millions of Door × SKU combinations, which would exhaust browser memory and Dataverse
+capacity if stored, while the factored form stays proportional to tiers × product lines ×
+SKUs plus exceptions.
+
 ### XIV. No Spec Is Complete Without Passing Unit Tests and Recorded Limitations
 
 A spec MUST NOT be declared complete until (a) Vitest unit tests covering its acceptance
@@ -375,4 +396,4 @@ redefinitions; MINOR for a new principle/section or materially expanded guidance
 for clarifications and non-semantic refinements. Adopting projects record their own
 ratification date when they complete initialization.
 
-**Version**: 2.1.0 | **Ratified**: 2026-10-23 | **Last Amended**: 2026-10-26
+**Version**: 2.2.0 | **Ratified**: 2026-10-23 | **Last Amended**: 2026-10-26
