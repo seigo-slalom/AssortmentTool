@@ -33,11 +33,12 @@ Property tests in `engine.equivalence.test.ts` compare the optimized engine agai
 ## 4. Performance (US3, SC-002–SC-004)
 
 ```powershell
-npx vitest bench --run src/features/engine/core/engine.bench.ts
+npx vitest run src/features/engine/core/engine.perf.test.ts
 ```
 
-Expect on the medium dataset: single-door derivation ≤ 200 ms (typically ≪ 5 ms), index
-build ≤ 1 s, all-door counts ≤ 100 ms.
+Vitest 5 has no `bench` API, so the budgets are asserted by this timed test (timings are
+logged as `[perf] …`). Expect on the medium dataset: single-door derivation ≤ 200 ms
+(typically ≪ 5 ms), index build ≤ 1 s, all-door counts ≤ 100 ms.
 
 ## 5. Loading (US4, SC-008)
 

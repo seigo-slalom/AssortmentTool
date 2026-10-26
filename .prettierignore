@@ -7,3 +7,4 @@ power.config.json
 package-lock.json
 .specify
 .github/skills
+coverage

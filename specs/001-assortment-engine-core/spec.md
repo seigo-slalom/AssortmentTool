@@ -409,12 +409,39 @@ expose every field the engine needs.
 
 ## Verification & Known Limitations
 
-_To be completed during `/speckit-implement` (Principle XIV)._ Will record: unit-test
-results and coverage figures, benchmark results against SC-002–SC-004, scenarios not
-covered, data gaps above, and deviations from the prototype or ERD. Known limitations at
-specification time:
+**Results (2026-10-26, implemented per `tasks.md`)**
+
+- `npm run test:coverage`: 17 test files, 100 tests passing; statements 100% (279/279),
+  branches 100% (151/151), functions 100% (71/71), lines 100% (240/240). A deliberately
+  uncovered branch made the run fail, confirming the gate (SC-007).
+- `npm run lint`, `npm run build`, and `prettier --check .` are clean. A temporary
+  `react` / adapters import in `core/` was rejected by the purity lint rule.
+- Optimized engine equals the naive reference engine on 500 generated datasets, covering
+  results, explanations, and counts (SC-005).
+- Medium dataset (3,000 doors, 5,000 SKUs, 6 tiers, 12 product lines, 18,000 rules,
+  20,000 exceptions), measured in `engine.perf.test.ts` on the dev machine: index build
+  ≈ 22 ms (SC-003 ≤ 1 s); single door ≈ 1.2 ms cold and ≈ 0.2 ms warm (SC-002 ≤ 200 ms);
+  counts for all doors ≈ 11 ms (SC-003 ≤ 100 ms). Loading the same volume issues 11
+  data-source requests (SC-008); both measured with mocked services, not a live
+  environment.
+
+**Known limitations and deviations**
 
 - No UI; explanations are available only through engine functions until screen specs are
   delivered.
 - Tier-rule effective dates are ignored.
 - Volumes beyond the "medium" band are not supported.
+- Adapters are verified against mocked generated services only; no live Dataverse run, so
+  the OData `select`/`filter` strings (including `_cr380_*_value` lookup columns) are
+  unconfirmed against a real environment.
+- Exception cancellation is expressed through the `active` flag; adapters filter to
+  status Active at the source, so "cancelled" exceptions never reach the engine and
+  appear in diagnostics only as `inactive` when supplied directly.
+- `PairCount.doorCount` is the number of doors sharing the (Tier, Product Line) pair;
+  doors with a missing tier are excluded from `byPair` but appear in `byDoor` with 0.
+- Vitest 5 no longer exports `bench`, so performance is asserted with timed tests rather
+  than `vitest bench`.
+- Template cleanup: the starter demo page, sample hook, and placeholder service were
+  removed; `App.tsx` now shows only the placeholder banner until the first screen spec.
+- Engine core lint purity rule replaces (not extends) the global `no-restricted-imports`
+  list for `src/features/engine/core/**`; that folder has no network code by design.
