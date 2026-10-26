@@ -120,7 +120,7 @@ specs/002-app-shell-tokens/
 
 ```text
 src/
-├── main.tsx                         # MODIFY: HashRouter; ThemeProvider replaces bare ConfigProvider
+├── main.tsx                         # MODIFY: ThemeProvider (outermost) → PowerProvider → Query → HashRouter
 ├── App.tsx                          # REWRITE: AppShell + lazy routes from lib/screens
 ├── App.test.tsx                     # REWRITE: routing, selection, not-found, titles
 ├── index.css                        # DELETE (replaced by theme/global.css)
@@ -147,8 +147,10 @@ src/
 │   ├── AppShell/   AppShell.tsx · AppShell.module.css · AppShell.test.tsx
 │   │               SideNav.tsx · SideNav.module.css · SideNav.test.tsx
 │   │               SkipLink.tsx · SkipLink.module.css · SkipLink.test.tsx · index.ts
+│   │               focusWrap.ts (+ test)   # explicit Tab wrap inside the compact drawer
 │   ├── PageHeader/ PageHeader.tsx · PageHeader.module.css · PageHeader.test.tsx · index.ts
 │   ├── ScreenRegion/ ScreenRegion.tsx · ScreenRegion.module.css · ScreenRegion.test.tsx · index.ts
+│   ├── ScreenScaffold/ ScreenScaffold.tsx · .module.css · .test.tsx · index.ts  # page layout
 │   ├── RegionState/  RegionState.tsx · RegionState.module.css · RegionState.test.tsx · index.ts
 │   ├── ErrorBoundary.tsx (+ test)   # MODIFY: render RegionState error
 │   └── PlaceholderBanner.tsx (+ test)   # DELETE (FR-014)
@@ -181,7 +183,7 @@ e2e/
 vite.config.ts                       # MODIFY: e2e-mode alias for @microsoft/power-apps/app
 playwright.config.ts                 # MODIFY: projects e2e / visual / prototype-baseline; port 5174 --mode e2e; snapshotPathTemplate
 eslint.config.js                     # MODIFY: no-restricted-syntax for literal inline styles / sizing props
-vitest.config.ts                     # MODIFY: css modules config; exclude index.ts barrels if type-only
+vitest.config.ts                     # MODIFY: css modules config (no extra coverage exclusions)
 package.json                         # MODIFY: add @axe-core/playwright (dev)
 .specify/memory/frontend-standards.md  # MODIFY: HashRouter note + theme/ layout
 ```
@@ -212,9 +214,9 @@ introduced by the screen-content specs, not by this shell spec.
 
 ## Complexity Tracking
 
-| Item                                                                                                                                   | Why Needed                                                                                      | Simpler Alternative Rejected Because                                                                                                    |
-| -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `@axe-core/playwright` (MPL-2.0) as **dev-only** dependency; constitution asks for MIT-licensed libraries                              | SC-007 requires automated proof of 0 WCAG 2.1 AA violations on every screen                     | Manual audits aren't repeatable; no MIT-licensed equivalent of axe is as complete. Not shipped in the bundle. **Needs human approval.** |
-| Prototype deviation: custom `NavLink` list instead of Ant Design `Menu` for the side nav                                               | FR-023 requires `aria-current="page"`; `Menu` exposes application-menu roles and cannot emit it | Using `Menu` would fail the accessibility requirement; visual parity is held by screenshot comparison                                   |
-| Prototype deviation: added "Skip to main content" link; prototype's empty header `<nav aria-label="Main">` in side mode not reproduced | FR-021 (WCAG 2.4.1); an empty landmark is an accessibility defect                               | The skip link is visually hidden until focused, so screenshots are unaffected                                                           |
-| Routing switched from `BrowserRouter` to `HashRouter` (differs from `frontend-standards.md`)                                           | Deep links / reload must work inside the static Power Apps host (FR-010)                        | `BrowserRouter` 404s on reload of nested paths without server rewrites                                                                  |
+| Item                                                                                                                                   | Why Needed                                                                                      | Simpler Alternative Rejected Because                                                                          |
+| -------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `@axe-core/playwright` (MPL-2.0) as **dev-only** dependency                                                                            | SC-007 requires automated proof of 0 WCAG 2.1 AA violations on every screen                     | Permitted by constitution 2.3.0 dev-only tooling exception (approved 2026-10-26); never shipped in the bundle |
+| Prototype deviation: custom `NavLink` list instead of Ant Design `Menu` for the side nav                                               | FR-023 requires `aria-current="page"`; `Menu` exposes application-menu roles and cannot emit it | Using `Menu` would fail the accessibility requirement; visual parity is held by screenshot comparison         |
+| Prototype deviation: added "Skip to main content" link; prototype's empty header `<nav aria-label="Main">` in side mode not reproduced | FR-021 (WCAG 2.4.1); an empty landmark is an accessibility defect                               | The skip link is visually hidden until focused, so screenshots are unaffected                                 |
+| Routing switched from `BrowserRouter` to `HashRouter` (differs from `frontend-standards.md`)                                           | Deep links / reload must work inside the static Power Apps host (FR-010)                        | `BrowserRouter` 404s on reload of nested paths without server rewrites                                        |

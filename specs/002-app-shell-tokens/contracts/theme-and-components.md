@@ -20,8 +20,7 @@ export const token: {
   readonly duration: Readonly<Record<DurationKey, string>>;
   readonly easing: { readonly standard: 'ease' };
   readonly letterSpacing: { readonly 'app-name': string };
-  readonly zIndex: Readonly<Record<'header' | 'drawer', number>>;
-  readonly opacity: { readonly 'control-outline': number };
+  readonly zIndex: Readonly<Record<'header' | 'skip-link', number>>;
   readonly measure: { readonly description: string };
 };
 export type Density = 'standard' | 'dense';
@@ -42,7 +41,8 @@ export const chartPalette: {
   readonly grid: string;
 };
 
-// ThemeProvider.tsx — replaces the bare <ConfigProvider> in main.tsx
+// ThemeProvider.tsx — outermost provider in main.tsx (so host loading/error states are branded);
+// also mirrors CSS variables and data-tier/data-density on <html> for portalled overlays
 export function ThemeProvider(props: { density?: Density; children: ReactNode }): JSX.Element;
 ```
 
@@ -86,8 +86,17 @@ export function ScreenRegion(props: {
   onRetry?: () => void;
   extra?: ReactNode;
   children?: ReactNode;
-  'data-visual-mask'?: boolean;
+  visualMask?: boolean; // renders data-visual-mask for screenshot comparison
+  testId?: string;
 }): JSX.Element;
+
+// ScreenScaffold/ScreenScaffold.tsx — route-level layout used by every page
+export function ScreenScaffold(props: {
+  screen: ScreenDefinition;
+  children?: ReactNode;
+}): JSX.Element;
+// sets the document title, renders PageHeader from the registry, then children or the
+// labeled placeholder ScreenRegion (data-testid="screen-placeholder", data-visual-mask)
 
 // RegionState/RegionState.tsx
 export type RegionStateKind = 'loading' | 'empty' | 'error' | 'placeholder';

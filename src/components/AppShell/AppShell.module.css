@@ -1,0 +1,112 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--canvas);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-panel);
+  height: var(--header-height);
+  padding-inline: var(--content-padding-standard);
+  background: var(--paper);
+  border-bottom: var(--border-width) solid var(--border);
+  overflow: hidden;
+}
+
+:global([data-tier='compact']) .header {
+  padding-inline: var(--content-padding-compact);
+}
+
+:global([data-tier='wide']) .header {
+  padding-inline: var(--content-padding-wide);
+}
+
+.trigger {
+  flex: 0 0 auto;
+  width: var(--nav-trigger-size) !important;
+  min-width: var(--nav-trigger-size) !important;
+  height: var(--nav-trigger-size) !important;
+}
+
+:global([data-tier='compact']) .trigger {
+  width: var(--touch-target) !important;
+  min-width: var(--touch-target) !important;
+  height: var(--touch-target) !important;
+}
+
+.brand {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--type-app-name-size);
+  line-height: var(--type-app-name-line);
+  letter-spacing: var(--letter-spacing-app-name);
+  text-transform: uppercase;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-control);
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+}
+
+.body {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.rail {
+  flex: 0 0 var(--nav-rail-width);
+  width: var(--nav-rail-width);
+  background: var(--paper);
+  border-inline-end: var(--border-width) solid var(--border);
+  transition:
+    width var(--duration-mid) var(--easing),
+    flex-basis var(--duration-mid) var(--easing);
+}
+
+.railCollapsed {
+  flex-basis: var(--nav-rail-collapsed-width);
+  width: var(--nav-rail-collapsed-width);
+}
+
+.main {
+  flex: 1 1 auto;
+  min-width: 0;
+  outline: none;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--content-max-width);
+  min-width: 0;
+  margin-inline: auto;
+  padding: var(--content-padding-standard);
+  gap: var(--section-gap-standard);
+}
+
+:global([data-tier='compact']) .content {
+  padding: var(--content-padding-compact);
+  gap: var(--section-gap-compact);
+}
+
+:global([data-tier='wide']) .content {
+  padding: var(--content-padding-wide);
+  gap: var(--section-gap-wide);
+}
+
+.drawerBody {
+  padding: 0 !important;
+}

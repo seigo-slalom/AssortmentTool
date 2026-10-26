@@ -132,6 +132,8 @@ npx power-apps push         # deploy to Power Apps; returns a shareable app URL
 | `npm run build`                                            | Type-check + production build (`tsc -b && vite build`)        |
 | `npm run lint` / `npm run format`                          | Lint / format                                                 |
 | `npm test` / `npm run test:coverage` / `npm run test:e2e`  | Unit tests / unit tests with the 100% coverage gate / e2e     |
+| `npx vite --mode e2e --port 5174`                          | Run the shell locally with a stubbed Power Apps host          |
+| `npm run test:e2e -- --project=visual`                     | Compare the app with prototype screenshot baselines           |
 | `npx power-apps add data-source --connector <api> -c <id>` | Generate typed services for a data source                     |
 | `npx power-apps push`                                      | Build output → deploy to Power Apps                           |
 | `npx power-apps connection list`                           | Find connection IDs                                           |
@@ -162,7 +164,8 @@ See the [constitution](.specify/memory/constitution.md) for the full set.
   memory/frontend-standards.md                  # React/UI/testing standards
   templates/                                     # spec/plan/tasks/constitution templates
 docs/RUNBOOK.md                                  # end-to-end operational guide
-src/                                             # placeholder code app (replace via SDD)
+src/                                             # Assortment Tool code app (theme/, components/, pages/, features/)
+e2e/                                             # Playwright: shell/ (structure, responsive, a11y) + visual/ (prototype baselines)
 ```
 
 ## Making this a template repository

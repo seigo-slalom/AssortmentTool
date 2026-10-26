@@ -4,6 +4,8 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   test: {
+    // Process CSS Modules with stable, unscoped class names so tests can assert on them.
+    css: { include: [/.+/], modules: { classNameStrategy: 'non-scoped' } },
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/test/setup.ts'],

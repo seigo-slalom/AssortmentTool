@@ -1,0 +1,33 @@
+.state {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: var(--state-min-height);
+}
+
+.error :global(.ant-result) {
+  padding: var(--space-panel) 0;
+}
+
+.error :global(.ant-result-title) {
+  font-size: var(--type-h5-size);
+  line-height: var(--type-h5-line);
+}
+
+.placeholder {
+  align-items: flex-start;
+  gap: var(--space-compact);
+  padding: var(--space-panel);
+  border: var(--border-width) dashed var(--border-control);
+  border-radius: var(--radius);
+  color: var(--ink-muted);
+}
+
+.placeholderTitle {
+  color: var(--ink);
+}
+
+.placeholderText {
+  margin: 0 !important;
+  max-width: var(--measure-description);
+}

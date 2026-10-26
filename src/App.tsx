@@ -1,33 +1,33 @@
-import { Layout, Space, Typography } from 'antd';
+import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import PlaceholderBanner from './components/PlaceholderBanner';
-import { usePowerContext } from './lib/powerContext';
+import { AppShell } from './components/AppShell';
+import { RegionState } from './components/RegionState';
+import { NAV_DESTINATIONS } from './lib/navigation';
+import { APP_NAME, SCREENS, type ScreenId } from './lib/screens';
 
-const { Header, Content, Footer } = Layout;
+// One lazily loaded module per screen (src/pages/<Screen>Page). Excluded prototype screens
+// are intentionally absent and fall through to NotFoundPage.
+const PAGES: Record<ScreenId, LazyExoticComponent<ComponentType>> = {
+  overview: lazy(() => import('./pages/OverviewPage')),
+  doors: lazy(() => import('./pages/DoorsPage')),
+  'door-detail': lazy(() => import('./pages/DoorDetailPage')),
+  'mass-update': lazy(() => import('./pages/MassUpdatePage')),
+  'tier-assortments': lazy(() => import('./pages/TierAssortmentsPage')),
+  exceptions: lazy(() => import('./pages/ExceptionsPage')),
+  'not-found': lazy(() => import('./pages/NotFoundPage')),
+};
 
-// Feature screens are added as routes here (lazy-load each page from src/pages).
 export default function App() {
-  const context = usePowerContext();
-  const userName = context?.user.fullName;
-
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Typography.Title level={4} style={{ color: '#fff', margin: 0 }}>
-          Power Platform Code App — Starter
-        </Typography.Title>
-        {userName && (
-          <Typography.Text style={{ color: '#fff' }}>Signed in as {userName}</Typography.Text>
-        )}
-      </Header>
-      <Content style={{ padding: 24 }}>
+    <AppShell appName={APP_NAME} items={NAV_DESTINATIONS}>
+      <Suspense fallback={<RegionState state="loading" />}>
         <Routes>
-          <Route path="*" element={<PlaceholderBanner />} />
+          {SCREENS.map(({ id, path }) => {
+            const Page = PAGES[id];
+            return <Route key={id} path={path} element={<Page />} />;
+          })}
         </Routes>
-      </Content>
-      <Footer style={{ textAlign: 'center' }}>
-        <Space>Slalom · Spec-Driven Development Starter</Space>
-      </Footer>
-    </Layout>
+      </Suspense>
+    </AppShell>
   );
 }

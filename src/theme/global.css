@@ -1,0 +1,103 @@
+/*
+ * Global rules for the Chanel design system. Every value comes from CSS custom properties
+ * generated from src/theme/token.ts by buildCssVariables(); no literal colors, sizes,
+ * durations, or font families are allowed here.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  min-height: 100dvh;
+}
+
+.cds-root {
+  min-height: 100dvh;
+  color: var(--ink);
+  background: var(--canvas);
+  font-family: var(--font-text);
+  font-weight: var(--weight-text);
+  font-size: var(--cds-body-size);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+/* Display face: uppercase, Regular 400, for titles and prominent labels only. */
+.cds-root :is(h1, h2, h3, h4, h5).ant-typography,
+.cds-root .cds-headline,
+.cds-root .cds-prominent-label,
+.cds-root .ant-card-head-title,
+.cds-root .ant-result-title,
+.cds-root .ant-drawer-title,
+.cds-root .ant-modal-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  text-transform: uppercase;
+}
+
+.cds-root .cds-prominent-label {
+  font-size: var(--cds-prominent-size);
+}
+
+/* Drawer title and ScreenRegion titles follow the prototype's ChanelUI sizes. */
+.cds-drawer-root .ant-drawer-title,
+.cds-drawer-root.ant-drawer .ant-drawer-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--type-app-name-size);
+  text-transform: uppercase;
+}
+
+.cds-sr-only {
+  position: absolute !important;
+  width: var(--border-width);
+  height: var(--border-width);
+  padding: 0;
+  margin: calc(-1 * var(--border-width));
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focus: 3px ink ring with 2px offset on every keyboard-operable element. */
+.cds-root
+  :is(
+    button,
+    a,
+    input,
+    textarea,
+    select,
+    [role='button'],
+    [role='tab'],
+    [role='switch'],
+    [role='checkbox'],
+    [role='radio'],
+    [tabindex='0'],
+    [tabindex='-1']
+  ):focus-visible,
+.cds-drawer-root :is(button, a, [tabindex='0']):focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cds-root *,
+  .cds-root *::before,
+  .cds-root *::after,
+  .cds-drawer-root *,
+  .cds-drawer-root *::before,
+  .cds-drawer-root *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+  }
+}

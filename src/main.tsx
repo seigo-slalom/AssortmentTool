@@ -1,27 +1,29 @@
-import { StrictMode } from 'react';
+﻿import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ConfigProvider } from 'antd';
 import App from './App';
 import PowerProvider from './PowerProvider';
 import ErrorBoundary from './components/ErrorBoundary';
-import './index.css';
+import { ThemeProvider } from './theme/ThemeProvider';
+import './theme/global.css';
 
 const queryClient = new QueryClient();
 
+// ThemeProvider is outermost so the host loading/error states are branded too. HashRouter
+// keeps every screen bookmarkable inside the static Power Apps host (research.md R5).
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <PowerProvider>
-      <QueryClientProvider client={queryClient}>
-        <ConfigProvider>
-          <BrowserRouter>
+    <ThemeProvider>
+      <PowerProvider>
+        <QueryClientProvider client={queryClient}>
+          <HashRouter>
             <ErrorBoundary>
               <App />
             </ErrorBoundary>
-          </BrowserRouter>
-        </ConfigProvider>
-      </QueryClientProvider>
-    </PowerProvider>
+          </HashRouter>
+        </QueryClientProvider>
+      </PowerProvider>
+    </ThemeProvider>
   </StrictMode>,
 );

@@ -31,3 +31,7 @@ playwright/.cache
 *.njsproj
 *.sln
 *.sw?
+
+# Env files
+.env*
+

@@ -1,7 +1,8 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { getContext, type IContext } from '@microsoft/power-apps/app';
-import { Alert, Flex, Spin } from 'antd';
+import { RegionState } from './components/RegionState';
 import { PowerContext } from './lib/powerContext';
+import styles from './PowerProvider.module.css';
 
 type InitState =
   | { status: 'loading' }
@@ -48,24 +49,21 @@ export default function PowerProvider({ children }: { children: ReactNode }) {
 
   if (state.status === 'loading') {
     return (
-      <Flex vertical align="center" justify="center" gap={16} style={{ minHeight: '100vh' }}>
-        <Spin size="large" />
-        <span>Connecting to Power Platform…</span>
-      </Flex>
+      <div className={styles.host}>
+        <RegionState state="loading" rows={3} description="Connecting to Power Platform…" />
+      </div>
     );
   }
 
   if (state.status === 'error') {
     return (
-      <Flex align="center" justify="center" style={{ minHeight: '100vh', padding: 24 }}>
-        <Alert
-          type="warning"
-          showIcon
-          message="Power Platform host unavailable"
+      <div className={styles.host}>
+        <RegionState
+          state="error"
+          title="Power Platform host unavailable"
           description={state.message}
-          style={{ maxWidth: 560 }}
         />
-      </Flex>
+      </div>
     );
   }
 

@@ -1,0 +1,14 @@
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-control);
+  padding: var(--space-panel);
+  background: var(--paper);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
+}
+
+.text {
+  margin: 0 !important;
+}

@@ -1,0 +1,8 @@
+/* Matches the prototype's per-screen column: region gap between blocks, bottom breathing room. */
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--region-gap-standard);
+  padding-bottom: var(--content-padding-wide);
+  min-width: 0;
+}

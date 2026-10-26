@@ -1,0 +1,12 @@
+.region {
+  min-width: 0;
+}
+
+.card {
+  height: 100%;
+  min-height: var(--region-min-height);
+}
+
+.title {
+  margin: 0 !important;
+}

@@ -33,18 +33,19 @@ numbers.
 Values the prototype's components hardcode; captured here so no literal appears elsewhere.
 None is a color, so Principle IX's "no additional brand colors" is respected.
 
-| Group.key                         | Value         | Prototype usage                                         |
-| --------------------------------- | ------------- | ------------------------------------------------------- |
-| `size.border-width`               | `1px`         | Header bottom border, rail border, region borders       |
-| `size.nav-rail-collapsed-width`   | `64px`        | Collapsed rail width                                    |
-| `size.nav-drawer-max-viewport`    | `85vw`        | Drawer width cap `min(300px, 85vw)`                     |
-| `size.control-height-sm`          | `32px`        | Compact-tier small control height                       |
-| `size.state-min-height`           | `96px`        | `RegionState` minimum height                            |
-| `spacing.nav-icon-gap`            | `5px`         | Menu `iconMarginInlineEnd`                              |
-| `letterSpacing.app-name`          | `0.04em`      | Brand label tracking                                    |
-| `zIndex.header` / `zIndex.drawer` | `10` / `1000` | Layering (Ant Design drawer default)                    |
-| `opacity.control-outline`         | `0.08`        | `controlOutline` = ink at 8% (derived, not a new color) |
-| `measure.description`             | `72ch`        | Page-header description max width                       |
+| Group.key                            | Value         | Prototype usage                                      |
+| ------------------------------------ | ------------- | ---------------------------------------------------- |
+| `size.border-width`                  | `1px`         | Header bottom border, rail border, region borders    |
+| `size.nav-rail-collapsed-width`      | `64px`        | Collapsed rail width                                 |
+| `size.nav-drawer-max-viewport`       | `85vw`        | Drawer width cap `min(300px, 85vw)`                  |
+| `size.control-height-sm`             | `32px`        | Compact-tier small control height                    |
+| `size.state-min-height`              | `96px`        | `RegionState` minimum height                         |
+| `size.page-header-text-basis`        | `320px`       | Page-header text column flex basis                   |
+| `spacing.nav-icon-gap`               | `5px`         | Menu `iconMarginInlineEnd`                           |
+| `spacing.nav-item-indent`            | `24px`        | Inline Menu item indent (found by visual comparison) |
+| `letterSpacing.app-name`             | `0.04em`      | Brand label tracking                                 |
+| `zIndex.header` / `zIndex.skip-link` | `10` / `1100` | Layering (skip link above header and drawer)         |
+| `measure.description`                | `72ch`        | Page-header description max width                    |
 
 ### Derived artifacts (pure functions, 100% unit-tested)
 
@@ -116,7 +117,7 @@ collapsed state is preserved across standard ↔ wide and reset on reload.
 | exceptions       | `/exceptions`        | Strategy                           | Exceptions       | —                | exceptions       |
 | not-found        | `*`                  | —                                  | Page not found   | —                | —                |
 
-**Derived**: `documentTitle(screen) = \`${screen.title} · Assortment tool\`` (FR-013).
+**Derived**: `documentTitle(title) = \`${title} · Assortment tool\``(FR-013). Ant Design`controlOutline`reuses the canonical`selected-option` color (ink at ~8%), so no opacity token or new color is needed.
 
 ---
 

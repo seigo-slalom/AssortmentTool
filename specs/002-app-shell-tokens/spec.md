@@ -157,8 +157,9 @@ at a standard and a compact viewport; run automated accessibility checks on ever
 3. **Given** the navigation, **When** read by assistive technology, **Then** it is exposed
    as a labeled navigation landmark and the selected entry is announced as the current page.
 4. **Given** the compact navigation drawer is open, **When** the tester presses Tab
-   repeatedly, **Then** focus stays within the drawer until it is closed, after which focus
-   returns to the menu button.
+   repeatedly, **Then** focus stays within the drawer until it is closed; closing with
+   Escape or an outside click returns focus to the menu button, and choosing a destination
+   moves focus to the main content area.
 5. **Given** the operating system requests reduced motion, **When** the drawer opens or
    navigation changes, **Then** transitions are removed or reduced.
 6. **Given** any screen, **When** the page title is read, **Then** it names the current
@@ -474,14 +475,56 @@ open for the screen specs that need them.
 
 ## Verification & Known Limitations
 
-_To be completed during and after implementation._ Known limitations at specification time:
+### Test results (2026-10-26, Windows, Playwright Chromium)
 
-- **Single font face**: only `ABChanel Corpo Regular` is licensed; weight 200 (text) and
-  400 (display) render identically, and bold/italic are not available.
-- **Placeholder content**: every in-scope screen shows a labeled placeholder region until
-  its content spec is delivered.
+| Gate                                       | Result                                                                                                                                                                                                                                                         |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run build` (strict TypeScript + Vite) | ✅ clean; TTF bundled as an asset; each screen ships its own lazy chunk                                                                                                                                                                                        |
+| `npm run lint`                             | ✅ clean, incl. new `no-restricted-syntax` rules for literal inline styles / sizing props                                                                                                                                                                      |
+| `npm run format:check`                     | ✅                                                                                                                                                                                                                                                             |
+| Unit tests (`npm run test:coverage`)       | ✅ 219 tests in 42 files; **100%** statements (472), branches (254), functions (131), lines (411)                                                                                                                                                              |
+| Token parity with constitution             | ✅ `src/theme/token.test.ts` (25 colors, type scale incl. dense, spacing, radius, shadows, sizes, breakpoints, motion)                                                                                                                                         |
+| No hardcoded style values                  | ✅ `src/theme/noHardcodedStyles.test.ts` scans every `src/**/*.{ts,tsx,css}` outside `token.ts`: 0 violations                                                                                                                                                  |
+| E2E `structure.spec.ts`                    | ✅ 15 — frame, nav order/selection, all 6 routes, breadcrumbs, 5 excluded addresses → not found, reload, back/forward, titles                                                                                                                                  |
+| E2E `responsive.spec.ts`                   | ✅ 69 — 7 viewports × 7 pages (incl. not-found), RegionState loading/error at all 7 viewports, 320 px for all pages, tier boundaries 991/992/1599/1600, live resize, rail collapse 64 px, drawer 300 px / 85vw, first render < 3 s, font-load failure fallback |
+| E2E `accessibility.spec.ts`                | ✅ 20 — axe WCAG 2.1 A/AA: **0 violations** on 7 pages at 390 px and 1366 px and with the drawer open; skip link; 3 px focus ring; drawer focus trap / return; reduced motion; forced colors                                                                   |
+| E2E `host-states.spec.ts`                  | ✅ 2 — branded loading and error states, no navigation before ready                                                                                                                                                                                            |
+| Visual vs prototype (`--project=visual`)   | ✅ 42/42 (6 screens × 7 viewports) — **pixel-identical** (0 differing pixels; also verified at `maxDiffPixelRatio: 0`)                                                                                                                                         |
+
+Visual comparison found and drove three fidelity fixes before passing: side-nav item pitch
+(44 px via collapsing margins, not 48 px), inline indent 24 px (new supplementary token
+`spacing.nav-item-indent`), and label/eyebrow line-height inherited from Ant Design rather
+than overridden.
+
+### Untested or manually verified only
+
+- **Real Power Apps host**: all automated runs use the deterministic host stub
+  (`vite --mode e2e`); the shell inside the Power Apps player has not been verified here
+  (requires a human `pa app push`).
+- **Browser zoom 200%**: not automated; covered indirectly because 200% zoom at 1280 px is
+  ~640 CSS px, inside the tested compact tier (360–768 px).
+- **Browsers other than Chromium**: Firefox / Safari / Edge legacy not run; baselines are
+  Chromium-on-Windows specific.
+- **Reviewer side-by-side sign-off (SC-010)**: pending human review.
+
+### Known limitations
+
+- **Single, caps-only font face**: only `ABChanel Corpo Regular` is licensed and its glyphs
+  are uppercase-only, so "mixed case" side-navigation and body text render visually
+  uppercase (identical to the prototype). Weight 200 (text) and 400 (display) render the
+  same; bold/italic are unavailable (`font-synthesis: none`).
+- **Placeholder content**: every in-scope screen shows a labeled "Coming in a later spec"
+  region until its content spec is delivered; Door detail shows the generic title
+  "Door detail" instead of the door name.
 - **No density toggle**: dense tokens exist but are not user-selectable.
-- **Screenshot baselines**: prototype baselines mask data-bearing regions, so they verify
-  chrome, typography, and color but not screen content.
+- **Screenshot baselines**: content below the page header, page-header descriptions/actions,
+  Door detail's eyebrow/title/last breadcrumb, the demo persona switcher, and the five
+  excluded nav entries are hidden in both captures, so comparisons verify chrome,
+  typography, and color but not screen content.
 - **Prototype demo controls** (persona switcher, density toggle) intentionally not
   reproduced.
+- **Deviations from the prototype** (plan.md Complexity Tracking): side navigation is a list
+  of links (for `aria-current`) styled to match the Ant Design Menu pixel-for-pixel; added
+  skip link (hidden until focused); prototype's empty header `<nav>` not reproduced; hash
+  routing; explicit Tab wrap inside the drawer because Ant Design's focus lock briefly
+  hands focus to `<body>`.

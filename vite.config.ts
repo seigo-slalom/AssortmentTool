@@ -1,10 +1,23 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { powerApps } from '@microsoft/power-apps-vite/plugin';
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react(), powerApps()],
+  // `vite --mode e2e` swaps the Power Apps host SDK for a deterministic stub so Playwright
+  // can run the shell without a live host (specs/002-app-shell-tokens/research.md R9).
+  resolve:
+    mode === 'e2e'
+      ? {
+          alias: {
+            '@microsoft/power-apps/app': fileURLToPath(
+              new URL('./e2e/fixtures/power-apps-app.stub.ts', import.meta.url),
+            ),
+          },
+        }
+      : undefined,
   build: {
     // antd alone (~786kB minified) exceeds the default 500kB warning even isolated into
     // its own vendor chunk (see manualChunks below); that chunk changes rarely and is
@@ -37,4 +50,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));

@@ -37,6 +37,11 @@ describe('PowerProvider', () => {
       </PowerProvider>,
     );
     expect(screen.getByText(/Connecting to Power Platform/)).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Loading content' })).toHaveAttribute(
+      'aria-busy',
+      'true',
+    );
+    expect(screen.queryByText(/user:/)).not.toBeInTheDocument();
   });
 
   it('renders children with the resolved context', async () => {
@@ -58,6 +63,8 @@ describe('PowerProvider', () => {
     );
     expect(await screen.findByText('host exploded')).toBeInTheDocument();
     expect(screen.getByText('Power Platform host unavailable')).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Content unavailable' })).toBeInTheDocument();
+    expect(screen.queryByText(/user:/)).not.toBeInTheDocument();
   });
 
   it('shows a generic message when a non-Error is thrown', async () => {
