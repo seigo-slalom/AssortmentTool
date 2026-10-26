@@ -53,8 +53,9 @@ brand, orientation, and navigation for all later specs.
    header shows the app name "Assortment tool", the side navigation lists exactly Overview,
    Doors, Tier assortments, and Exceptions in that order, and Overview is the selected item.
 2. **Given** the shell is displayed, **When** the tester inspects the typography, **Then**
-   titles, prominent labels, navigation labels, and the app name render uppercase in the
-   display typeface at regular weight, and body text renders in the text typeface.
+   the app name, page titles, eyebrows, and region labels render uppercase in the display
+   typeface at regular weight, while side-navigation labels and body text render in mixed
+   case in the text typeface, exactly as in the prototype.
 3. **Given** the shell is displayed, **When** colors are compared with the prototype,
    **Then** canvas, paper, ink, muted ink, border, and selected-navigation colors match the
    canonical brand palette with no additional colors introduced.
@@ -120,7 +121,9 @@ overflow, and spacing.
    opens a navigation drawer that closes after a destination is chosen, on Escape, or on
    clicking outside it.
 2. **Given** a viewport from 992 px to 1599 px, **When** any screen loads, **Then** the
-   navigation rail is visible beside the content and no menu button is shown.
+   navigation rail is visible beside the content, no drawer menu button is shown, and the
+   header shows a "Collapse navigation" toggle that narrows the rail to icons only
+   ("Expand navigation" restores it), as in the prototype.
 3. **Given** a viewport of 1600 px or wider, **When** any screen loads, **Then** the wide
    spacing tier applies and content never grows wider than 2200 px.
 4. **Given** any viewport in the matrix, **When** any screen loads, **Then** the page has
@@ -310,8 +313,11 @@ suite; both pass with no manual steps and without a live data environment.
 - **FR-016**: In the compact tier, navigation MUST move into a 300 px drawer opened by a
   40 px labeled menu button in the header; all interactive shell controls MUST be at least
   44 × 44 px; compact spacing values MUST apply.
-- **FR-017**: In the standard and wide tiers, a 240 px navigation rail MUST be permanently
-  visible and the menu button MUST NOT be shown; navigation items MUST be 40 px tall.
+- **FR-017**: In the standard and wide tiers, a 240 px navigation rail MUST be visible and
+  the drawer menu button MUST NOT be shown; navigation items MUST be 40 px tall. The header
+  MUST show a rail toggle labeled "Collapse navigation" / "Expand navigation" that narrows
+  the rail to a 64 px icons-only rail and back; collapsed entries keep an accessible name.
+  The collapsed state lasts for the session only.
 - **FR-018**: Content padding, section gap, and region gap MUST follow the compact /
   standard / wide token values (16/24/32, 12/20/28, 8/16/20 px), and content width MUST be
   capped at 2200 px.
@@ -350,9 +356,10 @@ suite; both pass with no manual steps and without a live data environment.
 - **FR-030**: The licensed font file MUST be bundled with the app (no remote source) and
   registered under both "ABChanel Corpo Display" and "ABChanel Corpo Text"; font synthesis
   MUST be disabled.
-- **FR-031**: Display-style text (app name, navigation labels, page titles, prominent
-  labels) MUST render uppercase at weight 400; body and label text MUST use weight 200 from
-  tokens.
+- **FR-031**: Display-style text (app name, page titles, eyebrows/prominent labels, region
+  labels, drawer title) MUST render uppercase in the display face at weight 400;
+  side-navigation labels, body, and label text MUST render in mixed case in the text face
+  at weight 200 from tokens, matching the prototype's side-navigation mode.
 - **FR-032**: The shell MUST render in the prototype's standard density; dense tokens MUST
   exist for later use but no user-facing density control is provided.
 
@@ -448,6 +455,16 @@ This feature reads no business data. The conceptual items it introduces are:
   constitution and are treated as constraints, not design choices.
 - Only the Regular face of the licensed font exists; weight 200 renders as Regular.
 - The standard density is the default and only density shown to users in this spec.
+
+## Clarifications
+
+### Session 2026-10-26 (plan-phase corrections from prototype source)
+
+- Side-navigation labels follow the prototype's side mode (`cds-side-label`: text face,
+  weight 200, mixed case); only the horizontal-navigation variant uses uppercase display
+  labels, and that variant is not used. → US1 scenario 2 and FR-031 updated.
+- The prototype header in side mode includes a rail collapse/expand toggle (240 px ↔
+  64 px). → US3 scenario 2 and FR-017 updated.
 
 ## Data Gaps
 
