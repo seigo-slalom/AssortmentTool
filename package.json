@@ -54,7 +54,7 @@
     "vite": "^8",
     "vitest": "^5"
   },
-          "lint-staged": {
+  "lint-staged": {
     "*": "prettier --write --ignore-unknown"
   }
 }
