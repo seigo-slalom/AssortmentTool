@@ -1,5 +1,19 @@
 <!--
 Sync Impact Report
+- Version change: 2.2.0 → 2.3.0 (MINOR)
+  Rationale: (1) clarifies Principle IX display-usage list so "nav labels" means the
+  horizontal-navigation variant; side-navigation labels follow the prototype's
+  `cds-side-label` (text face, weight 200, mixed case) — PATCH-level clarification;
+  (2) materially expands the UI Component Library Standard to permit non-MIT,
+  OSI-approved, dev-only test tooling that is never bundled (e.g. @axe-core/playwright,
+  MPL-2.0) — MINOR. Triggered by /speckit-analyze findings C1/C2 on 002-app-shell-tokens.
+- Modified principles: IX. Prototype Fidelity & Chanel Brand (nav-label clarification)
+- Modified sections: UI Component Library Standard (dev-only tooling license exception)
+- Added / removed sections: none
+- Templates: no changes required.
+- Deferred TODOs (unchanged): TODO(OWNING_TEAM), TODO(REVIEWERS), TODO(RETAILER_FIELD)
+
+Previous report (2.2.0):
 - Version change: 2.1.0 → 2.2.0 (MINOR)
   Rationale: formalizes a manual amendment to Principle XIII adding a new non-negotiable
   storage/memory constraint (derived-never-persisted, factored base assortments per
@@ -173,7 +187,8 @@ excluded screens MUST NOT be carried over; real data comes from generated servic
   MUST be bundled via `@font-face` (Vite asset import, no remote CDN) and registered under
   **both** family names `ABChanel Corpo Display` and `ABChanel Corpo Text` so the
   prototype's family stacks resolve unchanged. Display usage (titles, prominent labels,
-  grid headers, KPI values, nav labels) remains uppercase at weight 400; body/label usage
+  grid headers, KPI values, horizontal-navigation labels) remains uppercase at weight 400;
+  side-navigation labels follow the prototype's side mode (text face, mixed case); body/label usage
   keeps weight 200 in tokens. Because only a Regular face exists, weight 200 renders as
   Regular; `font-synthesis: none` MUST be set to prevent faux bold/italic. This is a known
   limitation to be listed in every UI spec's limitations section until more faces exist.
@@ -288,7 +303,10 @@ reproduce the prototype's SeriesChart (series ink → muted → light, grid `#e4
 height 220 px), with colors taken from `token.ts`.
 **ProComponents** remains an optional add-on only if it can be themed to full fidelity.
 Any library used MUST be accessible (WCAG 2.1 AA), tree-shakeable, actively maintained,
-and MIT-licensed (fonts excepted; they are licensed brand assets).
+and MIT-licensed (fonts excepted; they are licensed brand assets). Exception: dev-only test
+tooling that is never shipped in the app bundle (installed as a `devDependency` and
+imported only from `e2e/` or test files) MAY use another OSI-approved license (e.g.
+`@axe-core/playwright`, MPL-2.0); it MUST be listed in the feature plan.
 
 ## Canonical Brand Tokens (reference)
 
@@ -396,4 +414,4 @@ redefinitions; MINOR for a new principle/section or materially expanded guidance
 for clarifications and non-semantic refinements. Adopting projects record their own
 ratification date when they complete initialization.
 
-**Version**: 2.2.0 | **Ratified**: 2026-10-23 | **Last Amended**: 2026-10-26
+**Version**: 2.3.0 | **Ratified**: 2026-10-23 | **Last Amended**: 2026-10-26

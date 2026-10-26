@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint';
 import { defineConfig, globalIgnores } from 'eslint/config';
 
 export default defineConfig([
-  globalIgnores(['dist', 'coverage']),
+  globalIgnores(['dist', 'coverage', 'playwright-report', 'test-results']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
@@ -71,6 +71,26 @@ export default defineConfig([
                 'Direct Azure SDK calls are not allowed in code apps. Use a generated connector service instead.',
             },
           ],
+        },
+      ],
+    },
+  },
+  {
+    // Principle X: style values come from src/theme/token.ts, never inline literals.
+    files: ['src/**/*.tsx'],
+    ignores: ['src/**/*.test.tsx'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "JSXAttribute[name.name='style'] Literal",
+          message:
+            'No literal inline style values. Use a CSS Module with var(--token) or read from src/theme/token.ts.',
+        },
+        {
+          selector:
+            'JSXAttribute[name.name=/^(gap|size|width|height|padding|margin)$/] > JSXExpressionContainer > Literal[raw=/^\\d/]',
+          message: 'No numeric sizing literals. Derive the value from src/theme/token.ts.',
         },
       ],
     },

@@ -21,15 +21,29 @@ development and keep every app consistent and accessible.
 
 ```text
 src/
-├── components/     # Reusable presentational components
-├── hooks/          # Custom hooks (incl. TanStack Query hooks)
-├── pages/          # Route-level screens
-├── lib/            # Non-UI helpers, service wrappers, context
+├── theme/          # token.ts (ONLY literal style values), derived antd theme, CSS variables,
+│                   # font faces, chart palette, ThemeProvider, global.css (var() only)
+├── components/     # Shared ChanelUI replicas, one folder per component (AppShell,
+│                   # PageHeader, ScreenRegion, RegionState, ScreenScaffold, …)
+├── hooks/          # Custom hooks (useLayoutTier, useDocumentTitle, TanStack Query hooks)
+├── pages/          # One folder per route-level screen: <Screen>Page/{<Screen>Page.tsx, test, index.ts}
+├── features/       # Feature-scoped logic (e.g. engine/); no cross-feature internals
+├── lib/            # Non-UI helpers, navigation + screen registries, context
 ├── generated/      # CLI output from `pa app add data-source` — DO NOT hand-edit
 ├── PowerProvider.tsx  # Power Apps SDK init (loading/error lifecycle)
-├── App.tsx         # Layout + routes
-└── main.tsx        # Provider composition (PowerProvider, Query, Router, antd)
+├── App.tsx         # AppShell + lazy routes from lib/screens
+└── main.tsx        # Provider composition (Theme, Power, Query, HashRouter)
 ```
+
+## Styling
+
+- Every visual constant lives in `src/theme/token.ts`. Components style themselves with
+  CSS Modules (`*.module.css`) that use only `var(--token)`, `0`, keywords, `%`/`fr`, and
+  `calc()` over variables. The Ant Design theme and CSS variables are derived from tokens.
+- Layout tiers (`compact` < 992 ≤ `standard` < 1600 ≤ `wide`) are exposed as `data-tier`
+  on `.cds-root`; style tiers with `:global([data-tier='compact']) .x { … }` because media
+  queries cannot read CSS variables.
+- Enforced by `src/theme/noHardcodedStyles.test.ts` and ESLint `no-restricted-syntax`.
 
 ## Data access
 
@@ -44,8 +58,12 @@ src/
 ## Provider composition
 
 The root composes providers in this order (see `src/main.tsx`):
-`PowerProvider` → `QueryClientProvider` → `ConfigProvider` (antd theme) → `BrowserRouter` →
-`App`. `PowerProvider` gates rendering on the Power Apps SDK `getContext()` lifecycle.
+`ThemeProvider` (token theme, CSS variables, fonts) → `PowerProvider` → `QueryClientProvider`
+→ `HashRouter` → `ErrorBoundary` → `App`. `ThemeProvider` is outermost so the host
+loading/error states are branded. `PowerProvider` gates rendering on the Power Apps SDK
+`getContext()` lifecycle. `HashRouter` (not `BrowserRouter`) keeps every screen
+bookmarkable and reloadable inside the static Power Apps host, which cannot rewrite deep
+paths to `index.html`.
 
 ## Accessibility (default WCAG 2.1 AA)
 

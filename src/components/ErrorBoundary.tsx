@@ -1,5 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
-import { Button, Flex, Result } from 'antd';
+import { RegionState } from './RegionState';
+import styles from './ErrorBoundary.module.css';
 
 interface Props {
   children: ReactNode;
@@ -29,18 +30,14 @@ export default class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.error) {
       return (
-        <Flex align="center" justify="center" style={{ minHeight: '100vh', padding: 24 }}>
-          <Result
-            status="error"
+        <div className={styles.fallback}>
+          <RegionState
+            state="error"
             title="Something went wrong"
-            subTitle={this.state.error.message}
-            extra={
-              <Button type="primary" onClick={this.handleReload}>
-                Reload
-              </Button>
-            }
+            description={this.state.error.message}
+            onRetry={this.handleReload}
           />
-        </Flex>
+        </div>
       );
     }
 

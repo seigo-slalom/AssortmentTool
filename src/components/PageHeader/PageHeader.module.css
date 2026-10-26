@@ -1,0 +1,41 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-control);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-panel);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-compact);
+  min-width: 0;
+  flex: 1 1 var(--page-header-text-basis);
+}
+
+.eyebrow {
+  color: var(--ink-muted);
+}
+
+.title {
+  margin: 0 !important;
+  overflow-wrap: anywhere;
+}
+
+.description {
+  margin: 0 !important;
+  max-width: var(--measure-description);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-control);
+}

@@ -27,10 +27,12 @@ describe('ErrorBoundary', () => {
     );
 
     expect(screen.getByText('Something went wrong')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Reload' })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Content unavailable' })).toBeInTheDocument();
+    expect(screen.getByText('boom')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Try again' })).toBeInTheDocument();
   });
 
-  it('reloads the page when Reload is clicked', () => {
+  it('reloads the page when Try again is clicked', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
     const reload = vi.fn();
     vi.stubGlobal('location', { reload });
@@ -40,7 +42,7 @@ describe('ErrorBoundary', () => {
         <Bomb />
       </ErrorBoundary>,
     );
-    fireEvent.click(screen.getByRole('button', { name: 'Reload' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
 
     expect(reload).toHaveBeenCalledTimes(1);
     vi.unstubAllGlobals();

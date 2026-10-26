@@ -1,0 +1,89 @@
+/* Reproduces the prototype's inline Ant Design Menu (themed by ChanelUI) with token variables. */
+.nav {
+  display: block;
+}
+
+.list {
+  /* Block flow (not flex) so item margins collapse like the prototype's Menu: 44px pitch. */
+  display: block;
+  margin: 0;
+  padding: var(--space-control);
+  list-style: none;
+}
+
+.item {
+  margin-block: var(--space-compact);
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: var(--nav-icon-gap);
+  height: var(--nav-item-height);
+  padding-inline: var(--nav-item-indent) var(--space-panel);
+  border-radius: var(--radius);
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  transition:
+    background-color var(--duration-mid) var(--easing),
+    color var(--duration-mid) var(--easing);
+}
+
+.link:hover {
+  background: var(--canvas);
+  color: var(--ink);
+}
+
+.isActive,
+.isActive:hover {
+  background: var(--nav-selected-bg);
+  color: var(--nav-selected-text);
+}
+
+/* Selected items are ink, so their focus ring switches to paper and sits inside. */
+.isActive:focus-visible {
+  outline-color: var(--paper) !important;
+  outline-offset: calc(-1 * var(--focus-offset)) !important;
+}
+
+.icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  color: inherit;
+}
+
+.label {
+  font-family: var(--font-text);
+  font-weight: var(--weight-text);
+  font-size: var(--cds-body-size);
+  /* The prototype's Menu centres labels in a line box as tall as the item. */
+  line-height: var(--nav-item-height);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.collapsed .link {
+  justify-content: center;
+  padding-inline: 0;
+}
+
+.collapsed .label {
+  display: none;
+}
+
+.touch .link {
+  height: auto;
+  min-height: var(--touch-target);
+}
+
+.touch .label {
+  line-height: var(--touch-target);
+}
+
+@media (forced-colors: active) {
+  .isActive {
+    outline: var(--border-width) solid CanvasText;
+  }
+}

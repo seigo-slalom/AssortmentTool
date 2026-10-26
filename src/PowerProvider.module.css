@@ -1,0 +1,11 @@
+/* Full-height canvas that centers the branded host loading / error state. */
+.host {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100dvh;
+  width: 100%;
+  max-width: var(--modal-width);
+  margin-inline: auto;
+  padding: var(--content-padding-standard);
+}

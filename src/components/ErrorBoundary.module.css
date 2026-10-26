@@ -1,0 +1,11 @@
+/* Centers the branded error state on the canvas. */
+.fallback {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100dvh;
+  width: 100%;
+  max-width: var(--modal-width);
+  margin-inline: auto;
+  padding: var(--content-padding-standard);
+}
