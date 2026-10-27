@@ -70,12 +70,17 @@ test.describe('navigation', () => {
         'page',
       );
       await expect(page).toHaveTitle(`${screen.title} · Assortment tool`);
-      await expect(page.getByTestId('screen-placeholder')).toContainText('Coming in a later spec');
+      // Doors and Bulk Update have content since spec 003; the other screens are still placeholders.
+      if (!['doors', 'bulk-update'].includes(screen.id)) {
+        await expect(page.getByTestId('screen-placeholder')).toContainText(
+          'Coming in a later spec',
+        );
+      }
     });
   }
 
   test('sub-screens show a Doors breadcrumb that returns to Doors', async ({ page }) => {
-    for (const hash of ['#/doors/mass-update', '#/doors/D-001']) {
+    for (const hash of ['#/doors/bulk-update', '#/doors/D-001']) {
       await page.goto(`/${hash}`);
       const crumbs = page.getByRole('navigation', { name: 'Breadcrumb' });
       await crumbs.getByRole('link', { name: 'Doors' }).click();

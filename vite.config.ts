@@ -6,14 +6,21 @@ import { powerApps } from '@microsoft/power-apps-vite/plugin';
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => ({
   plugins: [react(), powerApps()],
-  // `vite --mode e2e` swaps the Power Apps host SDK for a deterministic stub so Playwright
-  // can run the shell without a live host (specs/002-app-shell-tokens/research.md R9).
+  // exceljs is only reached through a dynamic import; pre-bundling it stops the dev server
+  // from re-optimizing and reloading the page the first time an export or upload runs.
+  optimizeDeps: { include: ['exceljs'] },
+  // `vite --mode e2e` swaps the Power Apps host SDK and the data client for deterministic
+  // stubs so Playwright never needs a live host or Dataverse environment
+  // (specs/002-app-shell-tokens/research.md R9, specs/003-doors-screen/research.md R16).
   resolve:
     mode === 'e2e'
       ? {
           alias: {
             '@microsoft/power-apps/app': fileURLToPath(
               new URL('./e2e/fixtures/power-apps-app.stub.ts', import.meta.url),
+            ),
+            '@microsoft/power-apps/data': fileURLToPath(
+              new URL('./e2e/fixtures/power-apps-data.stub.ts', import.meta.url),
             ),
           },
         }
@@ -44,6 +51,12 @@ export default defineConfig(({ mode }) => ({
             {
               name: 'vendor-query',
               test: /[\\/]node_modules[\\/]@tanstack[\\/]/,
+            },
+            {
+              // Only reached through `import('exceljs')` in src/lib/excel, so this chunk loads
+              // on the first export or upload and never with the initial page.
+              name: 'vendor-exceljs',
+              test: /[\\/]node_modules[\\/]exceljs[\\/]/,
             },
           ],
         },

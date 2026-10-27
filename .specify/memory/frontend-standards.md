@@ -50,10 +50,22 @@ src/
 - All external data goes through **generated services** in `src/generated/services/`.
   Never use `fetch`, `axios`, Graph SDKs, or Azure REST (connector-first — see the
   constitution and `power-platform-code-apps.md`).
-- Wrap each service call in a TanStack Query hook (see `src/hooks/useSampleItems.ts` for
-  the placeholder pattern). Always render loading, error, and empty states.
-- The placeholder `src/lib/placeholderService.ts` is temporary — replace it with generated
-  services for real features.
+- Screens read the five assortment tables once through `useAssortmentData()`
+  (`src/lib/data/`, TanStack Query key `['assortment-data']`). It returns the records, an
+  index, and an Assortment Engine built from the **same** records. Do not load a second
+  copy for the engine. Previews (what-if tiers/exceptions) rebuild an engine from a modified
+  dataset with `withDoorTierOverrides` / `withDoorExceptions`; never persist results.
+- Writes use `src/lib/data/mutations.ts` (`setDoorTier`, `createDoorException`,
+  `cancelException`) which return `{ ok, error }` and never throw. Bulk writes re-check the
+  affected doors first (`recheckDoors`, 50 ids per request) and run through
+  `src/lib/async/runPool.ts` (4 at a time). Invalidate `useAssortmentData` after writes.
+- Always render loading, error, and empty states.
+- Excel (`src/lib/excel/`): exceljs is only reached through `import('exceljs')`, so it
+  stays in its own lazy chunk; `.csv` uploads use the in-house `parseCsv` (exceljs' CSV
+  reader needs Node streams).
+- Screen state: filters/sort/page that should survive reload live in the URL query
+  (`useSearchParams`); cross-route session state (door selection, last Doors query) lives
+  in `src/lib/session/` stores. No browser storage.
 
 ## Provider composition
 

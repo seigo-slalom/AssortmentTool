@@ -1,0 +1,39 @@
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-icon);
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.icon {
+  font-size: inherit;
+}
+
+.critical .icon {
+  color: var(--critical);
+}
+
+.error .icon {
+  color: var(--error);
+}
+
+.warning .icon {
+  color: var(--warning-strong);
+}
+
+.success .icon {
+  color: var(--success);
+}
+
+.info .icon {
+  color: var(--ink);
+}
+
+.neutral .icon {
+  color: var(--ink-muted);
+}
+
+.unavailable .icon {
+  color: var(--unavailable);
+}

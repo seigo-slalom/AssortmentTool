@@ -1,5 +1,5 @@
 import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppShell } from './components/AppShell';
 import { RegionState } from './components/RegionState';
 import { NAV_DESTINATIONS } from './lib/navigation';
@@ -11,7 +11,7 @@ const PAGES: Record<ScreenId, LazyExoticComponent<ComponentType>> = {
   overview: lazy(() => import('./pages/OverviewPage')),
   doors: lazy(() => import('./pages/DoorsPage')),
   'door-detail': lazy(() => import('./pages/DoorDetailPage')),
-  'mass-update': lazy(() => import('./pages/MassUpdatePage')),
+  'bulk-update': lazy(() => import('./pages/BulkUpdatePage')),
   'tier-assortments': lazy(() => import('./pages/TierAssortmentsPage')),
   exceptions: lazy(() => import('./pages/ExceptionsPage')),
   'not-found': lazy(() => import('./pages/NotFoundPage')),
@@ -22,6 +22,8 @@ export default function App() {
     <AppShell appName={APP_NAME} items={NAV_DESTINATIONS}>
       <Suspense fallback={<RegionState state="loading" />}>
         <Routes>
+          {/* Mass update was renamed Bulk Update; keep old links working. */}
+          <Route path="/doors/mass-update" element={<Navigate replace to="/doors/bulk-update" />} />
           {SCREENS.map(({ id, path }) => {
             const Page = PAGES[id];
             return <Route key={id} path={path} element={<Page />} />;

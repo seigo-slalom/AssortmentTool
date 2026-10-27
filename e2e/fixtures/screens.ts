@@ -26,9 +26,9 @@ export const SCREENS: readonly E2EScreen[] = [
     navLabel: 'Doors',
   },
   {
-    id: 'mass-update',
-    hash: '#/doors/mass-update',
-    title: 'Mass update',
+    id: 'bulk-update',
+    hash: '#/doors/bulk-update',
+    title: 'Bulk Update',
     eyebrow: 'Strategy',
     breadcrumb: 'Doors',
     navLabel: 'Doors',

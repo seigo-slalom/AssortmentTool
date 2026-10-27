@@ -12,7 +12,7 @@ import type {
   ExceptionAction,
   ExceptionLevel,
 } from '../core/types';
-import { fetchAllPages } from './fetchAllPages';
+import { fetchAllPages } from '../../../lib/data/fetchAllPages';
 
 // Choice values from the generated models (Cr380_assortmentexceptionscr380_*).
 const EXCEPTION_LEVELS = new Map<number, ExceptionLevel>([

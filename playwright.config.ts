@@ -21,7 +21,7 @@ export default defineConfig({
   projects: [
     {
       name: 'e2e',
-      testMatch: 'shell/**/*.spec.ts',
+      testMatch: ['shell/**/*.spec.ts', 'doors/**/*.spec.ts', 'bulk-update/**/*.spec.ts'],
       use: { ...devices['Desktop Chrome'] },
     },
     {

@@ -1,0 +1,267 @@
+/* Bulk Update layout (prototype `is.mass` markup), tokens only. */
+
+.workflow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--region-gap-standard);
+  min-width: 0;
+}
+
+.paper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tile-gap);
+  padding: var(--space-panel) var(--section-gap-standard);
+  background: var(--paper);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
+}
+
+.panel {
+  padding: var(--section-gap-standard) var(--content-padding-standard);
+  background: var(--paper);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
+  min-width: 0;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-panel);
+  min-width: 0;
+}
+
+.tight {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-control);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tile-gap);
+}
+
+.wrapRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-control) var(--section-gap-standard);
+}
+
+.muted {
+  color: var(--ink-muted);
+}
+
+.prominent {
+  margin: 0;
+  font-weight: var(--weight-display);
+}
+
+/* "How bulk update works" */
+.introList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--intro-item-min-width), 100%), 1fr));
+  gap: var(--space-panel) var(--content-padding-standard);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.introItem {
+  display: grid;
+  grid-template-columns: var(--intro-number-column) minmax(0, 1fr);
+  column-gap: var(--space-control);
+  align-items: baseline;
+}
+
+.introNumber {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--type-workflow-number-size);
+  line-height: var(--type-h4-line);
+  color: var(--ink-muted);
+}
+
+.introText {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--space-compact) / 2);
+}
+
+/* Step 1 cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--card-min-width), 100%), 1fr));
+  gap: var(--space-panel);
+  align-items: stretch;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--tile-gap);
+  padding: var(--space-panel) var(--section-gap-standard);
+  text-align: left;
+  font: inherit;
+  color: var(--ink);
+  background: var(--paper);
+  border: var(--border-width) solid var(--border-control);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.card[aria-pressed='true'] {
+  border-color: var(--ink);
+  box-shadow: inset 0 0 0 var(--border-width) var(--ink);
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tile-gap);
+}
+
+.cardTitle {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--type-h4-size);
+  line-height: var(--type-h4-line);
+  text-transform: uppercase;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: var(--grid-fact-label) minmax(0, 1fr);
+  gap: var(--space-icon) var(--tile-gap);
+  margin: 0;
+  font-size: var(--type-label-size);
+  line-height: var(--type-label-line);
+}
+
+.facts dt {
+  color: var(--ink-muted);
+}
+
+.factRow {
+  display: contents;
+}
+
+.facts dd {
+  margin: 0;
+}
+
+.redirect {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tile-gap);
+  padding: var(--space-panel) var(--section-gap-standard);
+  background: var(--canvas);
+  border: var(--border-width) dashed var(--border-control);
+  border-radius: var(--radius);
+}
+
+/* Long button labels wrap on the narrowest screens instead of overflowing. */
+.redirect :global(.ant-btn) {
+  max-width: 100%;
+  height: auto;
+  white-space: normal;
+}
+
+/* Step 2 */
+.limited {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-compact);
+  max-width: var(--panel-max-width);
+}
+
+.twoColumns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--two-column-min), 100%), 1fr));
+  gap: var(--space-panel);
+  align-items: start;
+}
+
+.subPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tile-gap);
+  padding: var(--space-panel);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
+}
+
+.canvas {
+  background: var(--canvas);
+}
+
+.notice {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-compact);
+  padding: var(--space-control) var(--tile-gap);
+  background: var(--canvas);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
+}
+
+.dragger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-compact);
+  padding: var(--dragger-padding);
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+/* Step 4 */
+.sentence {
+  margin: 0;
+  max-width: var(--sentence-max-width);
+  font-size: var(--type-h4-size);
+  line-height: var(--type-h4-line);
+}
+
+.afterList {
+  margin: 0;
+  padding-inline-start: var(--section-gap-standard);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-icon);
+}
+
+/* Result */
+.result {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-panel);
+}
+
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-control);
+  width: 100%;
+  max-width: var(--panel-max-width);
+  align-self: center;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+}
+
+.failures {
+  margin: 0;
+  padding-inline-start: var(--section-gap-standard);
+}

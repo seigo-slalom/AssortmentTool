@@ -1,6 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
+import { lastDoorsSearch } from '../../lib/session';
 import DoorDetailPage from './DoorDetailPage';
 
 const renderPage = () =>
@@ -30,5 +31,15 @@ describe('DoorDetailPage', () => {
     renderPage();
     const crumbs = screen.getByRole('navigation', { name: 'Breadcrumb' });
     expect(within(crumbs).getByRole('link', { name: 'Doors' })).toHaveAttribute('href', '/doors');
+  });
+
+  it('returns to Doors with the last filters', () => {
+    lastDoorsSearch.set('?saved=closed&page=2');
+    renderPage();
+    expect(screen.getByRole('link', { name: 'Doors' })).toHaveAttribute(
+      'href',
+      '/doors?saved=closed&page=2',
+    );
+    lastDoorsSearch.set('');
   });
 });

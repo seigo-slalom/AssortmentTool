@@ -1,0 +1,15 @@
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tile-gap);
+  padding: var(--space-control) var(--tile-gap);
+  background: var(--canvas);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
+}
+
+.actions {
+  gap: var(--space-control);
+}

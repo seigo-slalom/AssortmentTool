@@ -1,0 +1,9 @@
+.help {
+  display: flex;
+  flex-direction: column;
+  gap: var(--reason-picks-gap);
+}
+
+.picks {
+  gap: var(--reason-picks-gap);
+}

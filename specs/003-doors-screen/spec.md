@@ -598,8 +598,37 @@ back/forward; confirm breadcrumbs and highlighted navigation remain correct.
 
 ## Verification & Known Limitations
 
-To be completed at implementation (constitution XIV): unit test results and coverage,
-Playwright viewport matrix and screenshot comparison results, accessibility results,
-untested scenarios, and deviations. Known from the outset: single caps-only licensed font
-face (weights render as Regular); the deviations listed in the Overview table and Data
-Gaps above.
+### Test results (2026-10-27, Windows, Playwright Chromium)
+
+| Gate                             | Result                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run build`                  | ✅ clean; exceljs isolated in the lazy `vendor-exceljs` chunk (~929 kB, ~256 kB gzip), loaded only on export/template/upload                                                                                                                                                                                                                                                                                                                                           |
+| `npm run lint` · type-check      | ✅ clean                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| Unit tests (`vitest --coverage`) | ✅ 437 tests in 85 files; coverage thresholds (100%) met                                                                                                                                                                                                                                                                                                                                                                                                               |
+| E2E `--project=e2e`              | ✅ 126 tests: shell structure/responsive/accessibility (incl. Doors and Bulk Update at all 7 viewports), Doors (filters, saved filters, paging, selection, deep links), export (workbook read back and compared to the grid), inline tier change (success and failure), Bulk Update (selection re-tier + undo, saved filter, upload with every row status + "rows that need attention", throttled writes + retry, SKU exceptions + undo, redirect, history/breadcrumb) |
+| Visual vs prototype              | ⏳ not run: `doors-*` and `bulk-update-*` baselines must be recaptured by a human (`--project=prototype-baseline --update-snapshots`); `mass-update-*` baselines removed                                                                                                                                                                                                                                                                                               |
+
+### Untested or manually verified only
+
+- Live Dataverse writes. All runs use mocked services or the in-memory e2e stub. In
+  particular, clearing a tier on undo (`cr380_TierID@odata.bind: null`) may be rejected
+  because the schema marks the lookup as required; such doors are reported as failed
+  undo rows.
+- SKU Type availability in the real environment (retail/SPM split in the tier dialog).
+- Throughput and service-protection throttling at 2,500–5,000 writes.
+- Browsers other than Chromium; the real Power Apps host.
+
+### Known limitations and deviations
+
+- Single caps-only licensed font face (weights render as Regular).
+- Prototype deviations listed in the Overview table and Data Gaps above. Also: the KPI
+  "SAP rows for the next export" is shown as "SKU changes across doors", and the Bulk
+  Update result shows two progress steps (Saved · Assortment updated).
+- Tier-change reasons are required but not saved (FR-055). Undo is limited to the current
+  session's last update.
+- Because Product Line ↔ Axis is an exact single-value match, the re-tier warning
+  "receives SKUs of those axes only" appears for most doors whose tier spans several axes.
+- Accessibility: Ant Design's hidden `.ant-table-measure-row` (rendered for fixed-header
+  tables) is excluded from axe checks; it is zero-height and not user-facing.
+- Unit tests cover the Doors components through page-level integration tests rather than
+  one test file per component.

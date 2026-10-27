@@ -1,0 +1,24 @@
+.wrap {
+  min-width: 0;
+}
+
+.grid {
+  display: grid;
+  align-items: start;
+  column-gap: var(--space-panel);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.grid > * {
+  align-content: start;
+  min-width: 0;
+}
+
+/* Two columns when there is room for both, one otherwise (prototype: 560px container query). */
+.c2 {
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--two-column-min), 100%), 1fr));
+}
+
+.c1 {
+  grid-template-columns: minmax(0, 1fr);
+}

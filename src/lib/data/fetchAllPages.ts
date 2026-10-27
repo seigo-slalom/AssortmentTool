@@ -1,5 +1,5 @@
 import type { IOperationResult } from '@microsoft/power-apps/data';
-import type { IGetAllOptions } from '../../../generated/models/CommonModels';
+import type { IGetAllOptions } from '../../generated/models/CommonModels';
 
 export const PAGE_SIZE = 5000;
 

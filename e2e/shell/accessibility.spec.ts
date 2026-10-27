@@ -5,7 +5,12 @@ import { MATRIX_PAGES } from '../fixtures/screens';
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 
 const axe = async (page: Page) => {
-  const results = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
+  // `.ant-table-measure-row` is Ant Design's hidden, zero-height column-measuring row for
+  // fixed-header tables; it is not user-facing (spec 003 Known Limitations).
+  const results = await new AxeBuilder({ page })
+    .withTags(WCAG_TAGS)
+    .exclude('.ant-table-measure-row')
+    .analyze();
   expect(
     results.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`),
   ).toEqual([]);
