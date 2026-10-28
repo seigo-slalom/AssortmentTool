@@ -6,7 +6,7 @@ export type ScreenId =
   | 'overview'
   | 'doors'
   | 'door-detail'
-  | 'mass-update'
+  | 'bulk-update'
   | 'tier-assortments'
   | 'exceptions'
   | 'not-found';
@@ -43,22 +43,14 @@ export const SCREENS: readonly ScreenDefinition[] = [
     title: 'Doors',
     eyebrow: STRATEGY,
     navKey: 'doors',
-    placeholder: {
-      title: 'Doors',
-      description: 'The doors grid, filters and tier assignment arrive with the Doors spec.',
-    },
   },
   {
-    id: 'mass-update',
-    path: '/doors/mass-update',
-    title: 'Mass update',
+    id: 'bulk-update',
+    path: '/doors/bulk-update',
+    title: 'Bulk Update',
     eyebrow: STRATEGY,
     breadcrumb: DOORS_CRUMB,
     navKey: 'doors',
-    placeholder: {
-      title: 'Mass update',
-      description: 'The step-by-step mass update workflow arrives with the Mass update spec.',
-    },
   },
   {
     id: 'door-detail',

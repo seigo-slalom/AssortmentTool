@@ -1,0 +1,50 @@
+.row {
+  display: grid;
+  gap: var(--tile-gap);
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--kpi-min-tile), 100%), 1fr));
+}
+
+.kpi {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: var(--kpi-tile-height);
+  min-width: 0;
+  padding: var(--tile-gap) var(--space-panel);
+  background: var(--paper);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-tile);
+  color: var(--ink);
+  text-align: left;
+}
+
+.label,
+.status {
+  max-width: 100%;
+  font-size: var(--type-label-size);
+  line-height: var(--line-compact);
+}
+
+.label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.value {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--type-kpi-value-size);
+  line-height: var(--type-kpi-value-line);
+}
+
+.spacer {
+  height: var(--line-compact);
+}
+
+.missing {
+  color: var(--unavailable);
+}

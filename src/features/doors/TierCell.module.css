@@ -1,0 +1,9 @@
+.cell {
+  display: inline-flex;
+  gap: var(--space-icon);
+  align-items: center;
+}
+
+.select {
+  width: var(--tier-select-width);
+}

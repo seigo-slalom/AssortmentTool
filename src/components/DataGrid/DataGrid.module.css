@@ -1,0 +1,35 @@
+.wrap {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Grid headers: display face, mixed case, density-scaled size (prototype ChanelUI DataGrid). */
+.grid :global(.ant-table-thead > tr > th.ant-table-cell) {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--cds-grid-header-size);
+}
+
+.grid :global(.cds-row-zebra > .ant-table-cell) {
+  background: var(--row-zebra);
+}
+
+.grid :global(tr[tabindex]) {
+  cursor: pointer;
+}
+
+.grid :global(tr[tabindex]:focus-visible) {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: calc(-1 * var(--focus-ring-width));
+}
+
+.cellText {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.missing {
+  color: var(--unavailable);
+}

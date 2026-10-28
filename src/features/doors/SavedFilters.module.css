@@ -1,0 +1,20 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-control);
+  align-items: center;
+}
+
+.label {
+  color: var(--ink-muted);
+}
+
+.tag {
+  margin-inline-end: 0;
+}
+
+:global(.cds-root[data-tier='compact']) .tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-target);
+}

@@ -1,0 +1,36 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-control);
+  align-items: center;
+}
+
+.search {
+  width: var(--filter-search-width);
+}
+
+.wide {
+  width: var(--filter-select-width);
+}
+
+.tier {
+  width: var(--filter-tier-width);
+}
+
+.medium {
+  width: var(--filter-select-medium);
+}
+
+.narrow {
+  width: var(--filter-select-narrow);
+}
+
+.default {
+  width: var(--filter-select-default);
+}
+
+/* Compact tier: every filter takes the full row, with touch-sized targets. */
+:global(.cds-root[data-tier='compact']) .control {
+  width: 100%;
+  min-height: var(--touch-target);
+}

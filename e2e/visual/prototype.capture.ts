@@ -35,10 +35,12 @@ async function reachScreen(page: Page, id: string, compact: boolean) {
     await expect(page.locator('.cds-page-header__crumbs')).toContainText('Doors');
     return;
   }
-  if (id === 'mass-update') {
+  if (id === 'bulk-update') {
     await openNav(page, compact, 'Doors');
     await page.getByRole('button', { name: 'Mass update' }).click();
     await expect(page.locator('h1')).toHaveText('Mass update');
+    // The app renamed the screen (spec 003); compare everything but that wording.
+    await page.locator('h1').evaluate((h) => (h.textContent = 'Bulk Update'));
     return;
   }
   await openNav(page, compact, screen.navLabel!);

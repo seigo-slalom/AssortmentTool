@@ -32,4 +32,26 @@ describe('ScreenScaffold', () => {
     expect(screen.getByText('custom')).toBeInTheDocument();
     expect(screen.queryByTestId('screen-placeholder')).not.toBeInTheDocument();
   });
+
+  it('passes a description, actions and a breadcrumb override to the header', () => {
+    render(
+      <MemoryRouter>
+        <ScreenScaffold
+          screen={screenById('door-detail')}
+          description="3 doors"
+          actions={<button type="button">Act</button>}
+          breadcrumb={[{ label: 'Doors', to: '/doors?saved=closed' }]}
+        >
+          {null}
+        </ScreenScaffold>
+      </MemoryRouter>,
+    );
+    expect(screen.getByTestId('page-description')).toHaveTextContent('3 doors');
+    expect(screen.getByRole('button', { name: 'Act' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Doors' })).toHaveAttribute(
+      'href',
+      '/doors?saved=closed',
+    );
+    expect(screen.queryByTestId('screen-placeholder')).not.toBeInTheDocument();
+  });
 });

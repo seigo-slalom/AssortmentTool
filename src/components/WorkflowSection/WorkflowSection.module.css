@@ -1,0 +1,35 @@
+.section {
+  min-width: 0;
+}
+
+.heading {
+  margin: 0 0 var(--space-panel);
+  font-weight: var(--weight-display);
+}
+
+.head {
+  display: grid;
+  grid-template-columns: var(--workflow-number-column) minmax(0, 1fr);
+  align-items: baseline;
+  column-gap: var(--space-control);
+}
+
+.num {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--type-workflow-number-size);
+  line-height: var(--type-workflow-number-line);
+  color: var(--ink-muted);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--type-h3-size);
+  line-height: var(--type-h3-line);
+  text-transform: uppercase;
+}
+
+.body {
+  padding-inline-start: var(--workflow-body-indent);
+}

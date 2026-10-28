@@ -31,10 +31,10 @@ describe('SCREENS', () => {
         navKey: 'doors',
       },
       {
-        id: 'mass-update',
-        path: '/doors/mass-update',
+        id: 'bulk-update',
+        path: '/doors/bulk-update',
         eyebrow: 'Strategy',
-        title: 'Mass update',
+        title: 'Bulk Update',
         breadcrumb: doors,
         navKey: 'doors',
       },
@@ -73,11 +73,14 @@ describe('SCREENS', () => {
     ]);
   });
 
-  it('gives every in-scope screen a placeholder naming its later spec', () => {
-    for (const screen of SCREENS.filter((s) => s.id !== 'not-found')) {
+  it('gives every screen without content yet a placeholder naming its later spec', () => {
+    const delivered = ['doors', 'bulk-update', 'not-found'];
+    for (const screen of SCREENS.filter((s) => !delivered.includes(s.id))) {
       expect(screen.placeholder?.description, screen.id).toMatch(/spec\.$/);
     }
-    expect(screenById('not-found').placeholder).toBeUndefined();
+    for (const id of delivered) {
+      expect(screenById(id as Parameters<typeof screenById>[0]).placeholder).toBeUndefined();
+    }
   });
 
   it('never registers an excluded screen', () => {

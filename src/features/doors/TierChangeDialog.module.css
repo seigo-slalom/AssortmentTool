@@ -1,0 +1,16 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tile-gap);
+}
+
+.select {
+  width: 100%;
+}
+
+.impact {
+  padding: var(--space-control) var(--tile-gap);
+  background: var(--canvas);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
+}

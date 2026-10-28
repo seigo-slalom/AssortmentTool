@@ -55,6 +55,20 @@ body,
   text-transform: uppercase;
 }
 
+/* Modals and popconfirms are portalled outside .cds-root; they carry .cds-overlay-root. */
+.cds-overlay-root {
+  font-family: var(--font-text);
+  font-weight: var(--weight-text);
+  font-synthesis: none;
+}
+
+.cds-overlay-root .ant-modal-title,
+.cds-overlay-root .ant-popconfirm-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  text-transform: uppercase;
+}
+
 .cds-sr-only {
   position: absolute !important;
   width: var(--border-width);
@@ -83,7 +97,9 @@ body,
     [tabindex='0'],
     [tabindex='-1']
   ):focus-visible,
-.cds-drawer-root :is(button, a, [tabindex='0']):focus-visible {
+.cds-drawer-root :is(button, a, [tabindex='0']):focus-visible,
+.cds-overlay-root
+  :is(button, a, input, textarea, [role='button'], [role='radio'], [tabindex='0']):focus-visible {
   outline: var(--focus-ring-width) solid var(--focus-ring);
   outline-offset: var(--focus-offset);
 }
@@ -94,7 +110,10 @@ body,
   .cds-root *::after,
   .cds-drawer-root *,
   .cds-drawer-root *::before,
-  .cds-drawer-root *::after {
+  .cds-drawer-root *::after,
+  .cds-overlay-root *,
+  .cds-overlay-root *::before,
+  .cds-overlay-root *::after {
     scroll-behavior: auto !important;
     transition-duration: 0s !important;
     animation-duration: 0s !important;
