@@ -70,8 +70,8 @@ test.describe('navigation', () => {
         'page',
       );
       await expect(page).toHaveTitle(`${screen.title} · Assortment tool`);
-      // Doors and Bulk Update have content since spec 003; the other screens are still placeholders.
-      if (!['doors', 'bulk-update'].includes(screen.id)) {
+      // Doors and Bulk Update (spec 003) and Tier assortments (spec 004) have content.
+      if (!['doors', 'bulk-update', 'tier-assortments'].includes(screen.id)) {
         await expect(page.getByTestId('screen-placeholder')).toContainText(
           'Coming in a later spec',
         );

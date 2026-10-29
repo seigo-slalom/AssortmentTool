@@ -15,6 +15,7 @@ export const EXCEPTION_STATUS_CANCELLED = 860080001;
 export const SKU_TYPE_RETAIL = 860080000;
 export const SKU_TYPE_SPM = 860080001;
 export const TIER_STATUS_ACTIVE = 860080000;
+export const TIER_STATUS_INACTIVE = 860080001;
 
 export interface DoorRecord {
   id: string;
@@ -40,6 +41,7 @@ export interface TierRecord {
   name: string;
   rank?: number;
   active: boolean;
+  description?: string;
 }
 
 export type SkuType = 'retail' | 'spm';
@@ -52,6 +54,14 @@ export interface SkuRecord {
   franchise?: string;
   line?: string;
   type?: SkuType;
+  barcode?: string;
+  masterProductName?: string;
+  masterProductBaseline?: string;
+  masterFranchise?: string;
+  masterCategory?: string;
+  category?: string;
+  subcategory?: string;
+  lastSeenInSunrise?: string;
 }
 
 export interface TierRuleRecord {
@@ -105,7 +115,13 @@ export const RECORD_SOURCES = {
     filter: ACTIVE,
   },
   tiers: {
-    select: ['cr380_tierid', 'cr380_tiername', 'cr380_rank', 'cr380_tierstatus'],
+    select: [
+      'cr380_tierid',
+      'cr380_tiername',
+      'cr380_rank',
+      'cr380_tierstatus',
+      'cr380_description',
+    ],
     filter: ACTIVE,
   },
   skus: {
@@ -117,12 +133,20 @@ export const RECORD_SOURCES = {
       'cr380_franchise',
       'cr380_line',
       'cr380_skutype',
+      'cr380_barcode',
+      'cr380_masterproductname',
+      'cr380_masterproductbaseline',
+      'cr380_masterfranchise',
+      'cr380_productmastercategory',
+      'cr380_productcategory',
+      'cr380_productsubcategory',
+      'cr380_lastseeninsunrise',
     ],
-    filter: `${ACTIVE} and cr380_isactive eq true`,
+    filter: `${ACTIVE} and cr380_isactive eq false`,
   },
   tierRules: {
     select: ['cr380_tierruleid', '_cr380_tierid_value', '_cr380_sku_value'],
-    filter: `${ACTIVE} and cr380_isenabled eq true`,
+    filter: `${ACTIVE} and cr380_isenabled eq false`,
   },
   exceptions: {
     select: [
@@ -202,6 +226,7 @@ export async function loadTierRecords(): Promise<TierRecord[]> {
     name: row.cr380_tiername ?? '',
     rank: present(row.cr380_rank),
     active: Number(row.cr380_tierstatus) === TIER_STATUS_ACTIVE,
+    description: present(row.cr380_description),
   }));
 }
 
@@ -219,6 +244,14 @@ export async function loadSkuRecords(): Promise<SkuRecord[]> {
     franchise: present(row.cr380_franchise),
     line: present(row.cr380_line),
     type: SKU_TYPES.get(Number(row.cr380_skutype)),
+    barcode: present(row.cr380_barcode),
+    masterProductName: present(row.cr380_masterproductname),
+    masterProductBaseline: present(row.cr380_masterproductbaseline),
+    masterFranchise: present(row.cr380_masterfranchise),
+    masterCategory: present(row.cr380_productmastercategory),
+    category: present(row.cr380_productcategory),
+    subcategory: present(row.cr380_productsubcategory),
+    lastSeenInSunrise: present(row.cr380_lastseeninsunrise),
   }));
 }
 

@@ -21,6 +21,10 @@ export default defineConfig({
         '**/*.testutil.ts',
         '**/*.d.ts',
         '**/types.ts',
+        // Spec 004 (prototype): tier-assortment UI is excluded at the user's request; its
+        // pure logic in src/lib/tiers stays at 100% (plan Complexity Tracking, XIV deviation).
+        'src/features/tier-assortments/**',
+        'src/pages/TierAssortmentsPage/**',
       ],
       thresholds: { lines: 100, branches: 100, functions: 100, statements: 100 },
     },

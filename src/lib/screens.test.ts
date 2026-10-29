@@ -74,7 +74,7 @@ describe('SCREENS', () => {
   });
 
   it('gives every screen without content yet a placeholder naming its later spec', () => {
-    const delivered = ['doors', 'bulk-update', 'not-found'];
+    const delivered = ['doors', 'bulk-update', 'tier-assortments', 'not-found'];
     for (const screen of SCREENS.filter((s) => !delivered.includes(s.id))) {
       expect(screen.placeholder?.description, screen.id).toMatch(/spec\.$/);
     }

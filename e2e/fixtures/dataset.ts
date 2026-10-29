@@ -31,6 +31,7 @@ const tiers: Row[] = TIER_NAMES.map((name, i) => ({
   cr380_tierid: `T-${i + 1}`,
   cr380_tiername: name,
   cr380_rank: i + 1,
+  cr380_description: `${name} doors`,
   cr380_tierstatus: TIER_STATUS_ACTIVE,
   statecode: ACTIVE,
 }));
@@ -50,6 +51,14 @@ const skus: Row[] = Array.from({ length: 60 }, (_, i) => {
     cr380_franchise: franchise,
     cr380_line: `L${(i % 3) + 1}`,
     cr380_skutype: i % 2 === 0 ? SKU_RETAIL : SKU_SPM,
+    cr380_barcode: `3145891${key}`,
+    cr380_masterproductname: `${franchise} ${axis}`,
+    cr380_masterproductbaseline: franchise,
+    cr380_masterfranchise: franchise,
+    cr380_productmastercategory: axis,
+    cr380_productcategory: axis,
+    cr380_productsubcategory: `${axis} ${(i % 3) + 1}`,
+    cr380_lastseeninsunrise: '2026-09-23T06:15:00Z',
     cr380_isactive: true,
     statecode: ACTIVE,
   };

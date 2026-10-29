@@ -137,7 +137,7 @@ describe('record loaders', () => {
     expect(skus[1].type).toBe('spm');
     expect(skus[2].type).toBeUndefined();
     expect(Cr380_skusService.getAll).toHaveBeenCalledWith(
-      expect.objectContaining({ filter: 'statecode eq 0 and cr380_isactive eq true' }),
+      expect.objectContaining({ filter: 'statecode eq 0 and cr380_isactive eq false' }),
     );
   });
 

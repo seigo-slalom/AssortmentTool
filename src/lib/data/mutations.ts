@@ -1,6 +1,8 @@
 import type { IOperationResult } from '@microsoft/power-apps/data';
 import { Cr380_assortmentexceptionsService } from '../../generated/services/Cr380_assortmentexceptionsService';
 import { Cr380_doorsService } from '../../generated/services/Cr380_doorsService';
+import { Cr380_tierrulesService } from '../../generated/services/Cr380_tierrulesService';
+import { Cr380_tiersService } from '../../generated/services/Cr380_tiersService';
 import {
   EXCEPTION_ACTION_ADD,
   EXCEPTION_ACTION_REMOVE,
@@ -8,6 +10,8 @@ import {
   EXCEPTION_STATUS_ACTIVE,
   EXCEPTION_STATUS_CANCELLED,
   mapExceptionRow,
+  TIER_STATUS_ACTIVE,
+  TIER_STATUS_INACTIVE,
   type ExceptionRecord,
 } from './records';
 
@@ -91,6 +95,84 @@ export function cancelException(exceptionId: string): Promise<WriteResult> {
   );
 }
 
+/**
+ * Puts a SKU in a tier: re-enables an existing (disabled) rule for the pair, otherwise creates
+ * one, so re-adding never duplicates rules (spec 004 research R2).
+ */
+export async function enableTierRule(tierId: string, skuId: string): Promise<WriteResult> {
+  try {
+    const found = await Cr380_tierrulesService.getAll({
+      select: ['cr380_tierruleid', 'cr380_isenabled'],
+      filter: `statecode eq 0 and _cr380_tierid_value eq ${tierId} and _cr380_sku_value eq ${skuId}`,
+      top: 1,
+    });
+    if (!found.success) return { ok: false, error: messageOf(found.error) };
+    const existing = found.data[0];
+    if (existing?.cr380_isenabled) return { ok: true, value: undefined };
+    if (existing) {
+      return attempt(
+        () => Cr380_tierrulesService.update(existing.cr380_tierruleid, { cr380_isenabled: true }),
+        nothing,
+      );
+    }
+  } catch (error) {
+    return { ok: false, error: messageOf(error) };
+  }
+  const record = {
+    'cr380_TierID@odata.bind': bindTo('cr380_tiers', tierId),
+    'cr380_SKU@odata.bind': bindTo('cr380_skus', skuId),
+    cr380_isenabled: true,
+    statecode: 0,
+  } as unknown as Parameters<typeof Cr380_tierrulesService.create>[0];
+  return attempt(() => Cr380_tierrulesService.create(record), nothing);
+}
+
+/** Takes a SKU out of a tier by disabling its rule; the record is kept. */
+export function disableTierRule(ruleId: string): Promise<WriteResult> {
+  return attempt(() => Cr380_tierrulesService.update(ruleId, { cr380_isenabled: false }), nothing);
+}
+
+export interface NewTier {
+  name: string;
+  description: string;
+  rank: number;
+}
+
+export function createTier(input: NewTier): Promise<WriteResult<{ id: string }>> {
+  const record = {
+    cr380_tiername: input.name,
+    cr380_description: input.description,
+    cr380_rank: input.rank,
+    cr380_tierstatus: TIER_STATUS_ACTIVE,
+    statecode: 0,
+  } as unknown as Parameters<typeof Cr380_tiersService.create>[0];
+  return attempt(
+    () => Cr380_tiersService.create(record),
+    (row) => ({ id: row.cr380_tierid }),
+  );
+}
+
+export interface TierPatch {
+  name?: string;
+  description?: string;
+  rank?: number;
+  active?: boolean;
+}
+
+export function updateTier(tierId: string, patch: TierPatch): Promise<WriteResult> {
+  const changes: Record<string, unknown> = {};
+  if (patch.name !== undefined) changes.cr380_tiername = patch.name;
+  if (patch.description !== undefined) changes.cr380_description = patch.description;
+  if (patch.rank !== undefined) changes.cr380_rank = patch.rank;
+  if (patch.active !== undefined) {
+    changes.cr380_tierstatus = patch.active ? TIER_STATUS_ACTIVE : TIER_STATUS_INACTIVE;
+  }
+  return attempt(
+    () =>
+      Cr380_tiersService.update(tierId, changes as Parameters<typeof Cr380_tiersService.update>[1]),
+    nothing,
+  );
+}
 const chunks = <T>(items: readonly T[], size: number): T[][] => {
   const out: T[][] = [];
   for (let i = 0; i < items.length; i += size) out.push(items.slice(i, i + size));

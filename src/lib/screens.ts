@@ -70,11 +70,6 @@ export const SCREENS: readonly ScreenDefinition[] = [
     title: 'Tier assortments',
     eyebrow: STRATEGY,
     navKey: 'tier-assortments',
-    placeholder: {
-      title: 'Tier assortments',
-      description:
-        'Tier rules, composition and Manage tiers arrive with the Tier assortments spec.',
-    },
   },
   {
     id: 'exceptions',

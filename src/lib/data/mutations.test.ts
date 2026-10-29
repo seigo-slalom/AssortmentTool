@@ -1,14 +1,27 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Cr380_assortmentexceptionsService } from '../../generated/services/Cr380_assortmentexceptionsService';
 import { Cr380_doorsService } from '../../generated/services/Cr380_doorsService';
+import { Cr380_tierrulesService } from '../../generated/services/Cr380_tierrulesService';
+import { Cr380_tiersService } from '../../generated/services/Cr380_tiersService';
 import {
   bindTo,
   cancelException,
   createDoorException,
+  createTier,
+  disableTierRule,
+  enableTierRule,
   recheckDoorExceptions,
   recheckDoors,
   setDoorTier,
+  updateTier,
 } from './mutations';
+
+vi.mock('../../generated/services/Cr380_tierrulesService', () => ({
+  Cr380_tierrulesService: { getAll: vi.fn(), create: vi.fn(), update: vi.fn() },
+}));
+vi.mock('../../generated/services/Cr380_tiersService', () => ({
+  Cr380_tiersService: { create: vi.fn(), update: vi.fn() },
+}));
 
 vi.mock('../../generated/services/Cr380_doorsService', () => ({
   Cr380_doorsService: { getAll: vi.fn(), update: vi.fn() },
@@ -157,5 +170,80 @@ describe('re-checks', () => {
     await expect(recheckDoorExceptions(['D1'])).rejects.toThrow(
       'Could not re-check door exceptions: Unknown error',
     );
+  });
+});
+
+describe('tier rule and tier writes', () => {
+  const rules = Cr380_tierrulesService;
+
+  it('enableTierRule creates a rule when none exists', async () => {
+    vi.mocked(rules.getAll).mockResolvedValue(ok([]));
+    vi.mocked(rules.create).mockResolvedValue(ok({}));
+    await expect(enableTierRule('T1', 'S1')).resolves.toEqual({ ok: true, value: undefined });
+    expect(rules.create).toHaveBeenCalledWith({
+      'cr380_TierID@odata.bind': '/cr380_tiers(T1)',
+      'cr380_SKU@odata.bind': '/cr380_skus(S1)',
+      cr380_isenabled: true,
+      statecode: 0,
+    });
+  });
+
+  it('enableTierRule re-enables a disabled rule and skips an enabled one', async () => {
+    vi.mocked(rules.getAll).mockResolvedValueOnce(
+      ok([{ cr380_tierruleid: 'R1', cr380_isenabled: false }]),
+    );
+    vi.mocked(rules.update).mockResolvedValue(ok());
+    await enableTierRule('T1', 'S1');
+    expect(rules.update).toHaveBeenCalledWith('R1', { cr380_isenabled: true });
+    vi.mocked(rules.getAll).mockResolvedValueOnce(
+      ok([{ cr380_tierruleid: 'R1', cr380_isenabled: true }]),
+    );
+    await expect(enableTierRule('T1', 'S1')).resolves.toEqual({ ok: true, value: undefined });
+    expect(rules.create).not.toHaveBeenCalled();
+  });
+
+  it('enableTierRule reports lookup failures', async () => {
+    vi.mocked(rules.getAll).mockResolvedValueOnce(failed(new Error('nope')));
+    await expect(enableTierRule('T1', 'S1')).resolves.toEqual({ ok: false, error: 'nope' });
+    vi.mocked(rules.getAll).mockRejectedValueOnce(new Error('down'));
+    await expect(enableTierRule('T1', 'S1')).resolves.toEqual({ ok: false, error: 'down' });
+  });
+
+  it('disableTierRule disables the rule', async () => {
+    vi.mocked(rules.update).mockResolvedValue(ok());
+    await disableTierRule('R2');
+    expect(rules.update).toHaveBeenCalledWith('R2', { cr380_isenabled: false });
+  });
+
+  it('createTier creates an active tier and returns its id', async () => {
+    vi.mocked(Cr380_tiersService.create).mockResolvedValue(ok({ cr380_tierid: 'T9' }));
+    await expect(createTier({ name: 'Prestige', description: 'd', rank: 3 })).resolves.toEqual({
+      ok: true,
+      value: { id: 'T9' },
+    });
+    expect(Cr380_tiersService.create).toHaveBeenCalledWith({
+      cr380_tiername: 'Prestige',
+      cr380_description: 'd',
+      cr380_rank: 3,
+      cr380_tierstatus: 860080000,
+      statecode: 0,
+    });
+  });
+
+  it('updateTier sends only the given fields', async () => {
+    vi.mocked(Cr380_tiersService.update).mockResolvedValue(ok());
+    await updateTier('T1', { name: 'A', description: 'B', rank: 2, active: true });
+    expect(Cr380_tiersService.update).toHaveBeenLastCalledWith('T1', {
+      cr380_tiername: 'A',
+      cr380_description: 'B',
+      cr380_rank: 2,
+      cr380_tierstatus: 860080000,
+    });
+    await updateTier('T1', { active: false });
+    expect(Cr380_tiersService.update).toHaveBeenLastCalledWith('T1', {
+      cr380_tierstatus: 860080001,
+    });
+    await updateTier('T1', {});
+    expect(Cr380_tiersService.update).toHaveBeenLastCalledWith('T1', {});
   });
 });

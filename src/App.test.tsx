@@ -51,7 +51,10 @@ describe('App', () => {
     'routes $path to $title with $current selected',
     async ({ path, title, current }) => {
       renderAt(path);
-      expect(await screen.findByRole('heading', { level: 1, name: title })).toBeInTheDocument();
+      // Lazily loaded screens can take over a second to mount under coverage instrumentation.
+      expect(
+        await screen.findByRole('heading', { level: 1, name: title }, { timeout: 5000 }),
+      ).toBeInTheDocument();
       const currentLinks = screen
         .getAllByRole('link')
         .filter((link) => link.getAttribute('aria-current') === 'page');
